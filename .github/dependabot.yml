@@ -9,7 +9,15 @@ updates:
     schedule:
       interval: monthly
     open-pull-requests-limit: 5
+    ignore:
+      # The types follow the oldest Node.js version the project supports, not the newest one.
+      - dependency-name: "@types/node"
+        update-types: ["version-update:semver-major"]
   - package-ecosystem: docker
     directory: /
     schedule:
       interval: monthly
+    ignore:
+      # Move between long-term support releases by hand.
+      - dependency-name: node
+        update-types: ["version-update:semver-major"]

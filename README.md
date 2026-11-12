@@ -121,7 +121,7 @@ jobs:
   wrapped:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: guilhermeoliveirabrito/gitwrapped@main
         with:
           tz: "-3"   # your UTC offset, used for the hours chart
