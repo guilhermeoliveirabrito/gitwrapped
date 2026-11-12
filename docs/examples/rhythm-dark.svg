@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="gw-rhythm-t gw-rhythm-d">
+<title id="gw-rhythm-t">Coding rhythm of sample-dev in 2025</title>
+<desc id="gw-rhythm-d">You code most around 10pm. A true night owl: most of your commits land between 10pm and 5am.</desc>
+<defs>
+<linearGradient id="gw-rhythm-bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0b0f1a"/><stop offset="1" stop-color="#161a33"/></linearGradient>
+<linearGradient id="gw-rhythm-accent" gradientUnits="userSpaceOnUse" x1="64" y1="0" x2="1136" y2="0"><stop offset="0" stop-color="#8b5cf6"/><stop offset="0.55" stop-color="#ec4899"/><stop offset="1" stop-color="#22d3ee"/></linearGradient>
+<radialGradient id="gw-rhythm-glow-a"><stop offset="0" stop-color="#8b5cf6" stop-opacity="0.35"/><stop offset="1" stop-color="#8b5cf6" stop-opacity="0"/></radialGradient>
+<radialGradient id="gw-rhythm-glow-b"><stop offset="0" stop-color="#22d3ee" stop-opacity="0.22"/><stop offset="1" stop-color="#22d3ee" stop-opacity="0"/></radialGradient>
+</defs>
+<rect width="1200" height="630" fill="url(#gw-rhythm-bg)"/>
+<circle cx="1080" cy="40" r="360" fill="url(#gw-rhythm-glow-a)"/>
+<circle cx="80" cy="620" r="320" fill="url(#gw-rhythm-glow-b)"/>
+<g font-family="-apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif" fill="#f8fafc">
+<text x="64" y="88" font-size="18" font-weight="700" fill="url(#gw-rhythm-accent)" letter-spacing="4">CODING RHYTHM · 2025</text>
+<text x="64" y="152" font-size="52" font-weight="800">You code most around 10pm</text>
+<text x="64" y="190" font-size="24" font-weight="400" fill="#94a3b8">A true night owl: most of your commits land between 10pm and 5am.</text>
+<rect x="64" y="226" width="640" height="336" rx="20" fill="#ffffff" fill-opacity="0.06"/>
+<text x="92" y="268" font-size="22" font-weight="700">Commits by hour of day</text>
+<text x="676" y="268" font-size="16" font-weight="400" fill="#94a3b8" text-anchor="end">sample of 420 commits</text>
+<rect x="92" y="364" width="18.33" height="150" rx="4" fill="url(#gw-rhythm-accent)"/>
+<rect x="116.33" y="414" width="18.33" height="100" rx="4" fill="url(#gw-rhythm-accent)"/>
+<rect x="140.67" y="464" width="18.33" height="50" rx="4" fill="url(#gw-rhythm-accent)"/>
+<rect x="165" y="507.33" width="18.33" height="6.67" rx="4" fill="url(#gw-rhythm-accent)"/>
+<rect x="189.33" y="510.67" width="18.33" height="3.33" rx="4" fill="url(#gw-rhythm-accent)"/>
+<rect x="213.67" y="510.67" width="18.33" height="3.33" rx="4" fill="url(#gw-rhythm-accent)"/>
+<rect x="238" y="510.67" width="18.33" height="3.33" rx="4" fill="url(#gw-rhythm-accent)"/>
+<rect x="262.33" y="510.67" width="18.33" height="3.33" rx="4" fill="url(#gw-rhythm-accent)"/>
+<rect x="286.67" y="497.33" width="18.33" height="16.67" rx="4" fill="url(#gw-rhythm-accent)"/>
+<rect x="311" y="480.67" width="18.33" height="33.33" rx="4" fill="url(#gw-rhythm-accent)"/>
+<rect x="335.33" y="467.33" width="18.33" height="46.67" rx="4" fill="url(#gw-rhythm-accent)"/>
+<rect x="359.67" y="480.67" width="18.33" height="33.33" rx="4" fill="url(#gw-rhythm-accent)"/>
+<rect x="384" y="460.67" width="18.33" height="53.33" rx="4" fill="url(#gw-rhythm-accent)"/>
+<rect x="408.33" y="460.67" width="18.33" height="53.33" rx="4" fill="url(#gw-rhythm-accent)"/>
+<rect x="432.67" y="460.67" width="18.33" height="53.33" rx="4" fill="url(#gw-rhythm-accent)"/>
+<rect x="457" y="474" width="18.33" height="40" rx="4" fill="url(#gw-rhythm-accent)"/>
+<rect x="481.33" y="474" width="18.33" height="40" rx="4" fill="url(#gw-rhythm-accent)"/>
+<rect x="505.67" y="474" width="18.33" height="40" rx="4" fill="url(#gw-rhythm-accent)"/>
+<rect x="530" y="477.33" width="18.33" height="36.67" rx="4" fill="url(#gw-rhythm-accent)"/>
+<rect x="554.33" y="444" width="18.33" height="70" rx="4" fill="url(#gw-rhythm-accent)"/>
+<rect x="578.67" y="394" width="18.33" height="120" rx="4" fill="url(#gw-rhythm-accent)"/>
+<rect x="603" y="407.33" width="18.33" height="106.67" rx="4" fill="url(#gw-rhythm-accent)"/>
+<rect x="627.33" y="324" width="18.33" height="190" rx="4" fill="#22d3ee"/>
+<rect x="651.67" y="367.33" width="18.33" height="146.67" rx="4" fill="url(#gw-rhythm-accent)"/>
+<text x="101.17" y="544" font-size="16" font-weight="400" fill="#94a3b8" text-anchor="middle">12am</text>
+<text x="247.17" y="544" font-size="16" font-weight="400" fill="#94a3b8" text-anchor="middle">6am</text>
+<text x="393.17" y="544" font-size="16" font-weight="400" fill="#94a3b8" text-anchor="middle">12pm</text>
+<text x="539.17" y="544" font-size="16" font-weight="400" fill="#94a3b8" text-anchor="middle">6pm</text>
+<rect x="724" y="226" width="412" height="336" rx="20" fill="#ffffff" fill-opacity="0.06"/>
+<text x="752" y="268" font-size="22" font-weight="700">Contributions by weekday</text>
+<text x="752" y="311" font-size="18" font-weight="400" fill="#94a3b8">Mon</text>
+<rect x="836" y="296" width="195.76" height="20" rx="6" fill="url(#gw-rhythm-accent)"/>
+<text x="1108" y="312" font-size="16" font-weight="400" fill="#94a3b8" text-anchor="end">176</text>
+<text x="752" y="349" font-size="18" font-weight="400" fill="#94a3b8">Tue</text>
+<rect x="836" y="334" width="169.07" height="20" rx="6" fill="url(#gw-rhythm-accent)"/>
+<text x="1108" y="350" font-size="16" font-weight="400" fill="#94a3b8" text-anchor="end">152</text>
+<text x="752" y="387" font-size="18" font-weight="400" fill="#94a3b8">Wed</text>
+<rect x="836" y="372" width="191.32" height="20" rx="6" fill="url(#gw-rhythm-accent)"/>
+<text x="1108" y="388" font-size="16" font-weight="400" fill="#94a3b8" text-anchor="end">172</text>
+<text x="752" y="425" font-size="18" font-weight="400" fill="#94a3b8">Thu</text>
+<rect x="836" y="410" width="197.99" height="20" rx="6" fill="url(#gw-rhythm-accent)"/>
+<text x="1108" y="426" font-size="16" font-weight="400" fill="#94a3b8" text-anchor="end">178</text>
+<text x="752" y="463" font-size="18" font-weight="400" fill="#94a3b8">Fri</text>
+<rect x="836" y="448" width="208" height="20" rx="6" fill="#22d3ee"/>
+<text x="1108" y="464" font-size="16" font-weight="400" fill="#94a3b8" text-anchor="end">187</text>
+<text x="752" y="501" font-size="18" font-weight="400" fill="#94a3b8">Sat</text>
+<rect x="836" y="486" width="171.29" height="20" rx="6" fill="url(#gw-rhythm-accent)"/>
+<text x="1108" y="502" font-size="16" font-weight="400" fill="#94a3b8" text-anchor="end">154</text>
+<text x="752" y="539" font-size="18" font-weight="400" fill="#94a3b8">Sun</text>
+<rect x="836" y="524" width="113.45" height="20" rx="6" fill="url(#gw-rhythm-accent)"/>
+<text x="1108" y="540" font-size="16" font-weight="400" fill="#94a3b8" text-anchor="end">102</text>
+<text x="64" y="604" font-size="18" font-weight="700" fill="url(#gw-rhythm-accent)">gitwrapped</text>
+<text x="1136" y="604" font-size="16" font-weight="400" fill="#94a3b8" text-anchor="end">github.com/guilhermeoliveirabrito/gitwrapped</text>
+</g>
+</svg>

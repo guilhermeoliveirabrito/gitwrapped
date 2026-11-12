@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="gw-summary-t gw-summary-d">
+<title id="gw-summary-t">Git Wrapped 2025 summary for sample-dev</title>
+<desc id="gw-summary-d">1121 contributions, 922 commits, 252 active days, longest streak 35 days. Personality: The Night Owl.</desc>
+<defs>
+<linearGradient id="gw-summary-bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0b0f1a"/><stop offset="1" stop-color="#161a33"/></linearGradient>
+<linearGradient id="gw-summary-accent" gradientUnits="userSpaceOnUse" x1="64" y1="0" x2="1136" y2="0"><stop offset="0" stop-color="#8b5cf6"/><stop offset="0.55" stop-color="#ec4899"/><stop offset="1" stop-color="#22d3ee"/></linearGradient>
+<radialGradient id="gw-summary-glow-a"><stop offset="0" stop-color="#8b5cf6" stop-opacity="0.35"/><stop offset="1" stop-color="#8b5cf6" stop-opacity="0"/></radialGradient>
+<radialGradient id="gw-summary-glow-b"><stop offset="0" stop-color="#22d3ee" stop-opacity="0.22"/><stop offset="1" stop-color="#22d3ee" stop-opacity="0"/></radialGradient>
+</defs>
+<rect width="1200" height="630" fill="url(#gw-summary-bg)"/>
+<circle cx="1080" cy="40" r="360" fill="url(#gw-summary-glow-a)"/>
+<circle cx="80" cy="620" r="320" fill="url(#gw-summary-glow-b)"/>
+<g font-family="-apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif" fill="#f8fafc">
+<text x="64" y="88" font-size="18" font-weight="700" fill="url(#gw-summary-accent)" letter-spacing="4">GIT WRAPPED · 2025</text>
+<text x="64" y="152" font-size="56" font-weight="800">Sample Dev</text>
+<text x="64" y="190" font-size="24" font-weight="400" fill="#94a3b8">@sample-dev · 2025 in code</text>
+<rect x="64" y="232" width="252" height="140" rx="20" fill="#ffffff" fill-opacity="0.06"/>
+<text x="92" y="304" font-size="52" font-weight="800" fill="url(#gw-summary-accent)">1,121</text>
+<text x="92" y="340" font-size="20" font-weight="400" fill="#94a3b8">contributions</text>
+<rect x="337.33" y="232" width="252" height="140" rx="20" fill="#ffffff" fill-opacity="0.06"/>
+<text x="365.33" y="304" font-size="52" font-weight="800" fill="url(#gw-summary-accent)">922</text>
+<text x="365.33" y="340" font-size="20" font-weight="400" fill="#94a3b8">commits</text>
+<rect x="610.67" y="232" width="252" height="140" rx="20" fill="#ffffff" fill-opacity="0.06"/>
+<text x="638.67" y="304" font-size="52" font-weight="800" fill="url(#gw-summary-accent)">64</text>
+<text x="638.67" y="340" font-size="20" font-weight="400" fill="#94a3b8">pull requests</text>
+<rect x="884" y="232" width="252" height="140" rx="20" fill="#ffffff" fill-opacity="0.06"/>
+<text x="912" y="304" font-size="52" font-weight="800" fill="url(#gw-summary-accent)">112</text>
+<text x="912" y="340" font-size="20" font-weight="400" fill="#94a3b8">code reviews</text>
+<rect x="64" y="392" width="344" height="120" rx="20" fill="#ffffff" fill-opacity="0.06"/>
+<text x="92" y="456" font-size="40" font-weight="700">252 days</text>
+<text x="92" y="488" font-size="18" font-weight="400" fill="#94a3b8">active in 2025</text>
+<rect x="428" y="392" width="344" height="120" rx="20" fill="#ffffff" fill-opacity="0.06"/>
+<text x="456" y="456" font-size="40" font-weight="700">35 days</text>
+<text x="456" y="488" font-size="18" font-weight="400" fill="#94a3b8">longest streak</text>
+<rect x="792" y="392" width="344" height="120" rx="20" fill="#ffffff" fill-opacity="0.06"/>
+<text x="820" y="456" font-size="40" font-weight="700">TypeScript</text>
+<text x="820" y="488" font-size="18" font-weight="400" fill="#94a3b8">top language</text>
+<text x="64" y="566" font-size="24" fill="#94a3b8">Dev personality: <tspan font-weight="800" fill="url(#gw-summary-accent)">The Night Owl</tspan></text>
+<text x="64" y="604" font-size="18" font-weight="700" fill="url(#gw-summary-accent)">gitwrapped</text>
+<text x="1136" y="604" font-size="16" font-weight="400" fill="#94a3b8" text-anchor="end">github.com/guilhermeoliveirabrito/gitwrapped</text>
+</g>
+</svg>
