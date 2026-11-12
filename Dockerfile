@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1
 
 # ---- build: compile TypeScript ----
-FROM node:22-alpine AS build
+FROM node:25-alpine AS build
 WORKDIR /app
 COPY package.json tsconfig.json tsconfig.build.json ./
 RUN npm install --no-audit --no-fund
@@ -9,7 +9,7 @@ COPY src ./src
 RUN npm run build
 
 # ---- runtime: no dependencies, just the compiled output ----
-FROM node:22-alpine
+FROM node:25-alpine
 WORKDIR /app
 ENV NODE_ENV=production \
     PORT=3000
