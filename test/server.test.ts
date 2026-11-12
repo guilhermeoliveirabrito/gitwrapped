@@ -83,6 +83,21 @@ describe('server', () => {
     }
   });
 
+  it('renders cards in the requested language', async () => {
+    const demo = await (await fetch(`${base}/api/demo/summary?lang=pt-BR`)).text();
+    assert.ok(demo.includes('contribuições'));
+    const real = await (await fetch(`${base}/api/card/summary?user=octocat&year=2025&lang=pt`)).text();
+    assert.ok(real.includes('contribuições'));
+    const english = await (await fetch(`${base}/api/card/summary?user=octocat&year=2025`)).text();
+    assert.ok(english.includes('contributions'));
+  });
+
+  it('draws error cards in the requested language', async () => {
+    const res = await fetch(`${base}/api/card/summary?user=ghost&year=2025&lang=pt-BR`);
+    assert.equal(res.status, 404);
+    assert.ok((await res.text()).includes('Não foi possível gerar este card'));
+  });
+
   it('returns stats as JSON', async () => {
     const res = await fetch(`${base}/api/stats?user=octocat&year=2025`);
     assert.equal(res.status, 200);
@@ -116,6 +131,8 @@ describe('server', () => {
       ['/api/card/summary?user=octocat&year=abc', 'year must be between'],
       ['/api/card/summary?user=octocat&theme=neon', 'Unknown theme'],
       ['/api/card/summary?user=octocat&tz=99', 'tz must be'],
+      ['/api/card/summary?user=octocat&lang=fr', 'Unknown lang'],
+      ['/api/demo/summary?lang=xx', 'Unknown lang'],
       ['/api/card/nope?user=octocat', 'Unknown card.'],
       ['/api/demo/nope', 'Unknown card.'],
     ];

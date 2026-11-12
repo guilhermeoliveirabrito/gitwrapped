@@ -1,6 +1,7 @@
-import { MONTH_NAMES, weekdayOf } from '../stats.ts';
+import { weekdayOf } from '../stats.ts';
 import type { WrappedStats } from '../types.ts';
-import { CONTENT_WIDTH, MARGIN, days as dayCount, eyebrow, fmt, frame, panel, r, shortDate, text } from './svg.ts';
+import type { Labels } from './i18n.ts';
+import { CONTENT_WIDTH, MARGIN, eyebrow, frame, panel, r, text } from './svg.ts';
 import type { Theme } from './svg.ts';
 
 function level(count: number, max: number): number {
@@ -8,19 +9,20 @@ function level(count: number, max: number): number {
   return Math.min(4, Math.max(1, Math.ceil((count / max) * 4)));
 }
 
-export function heatmapCard(stats: WrappedStats, theme: Theme): string {
+export function heatmapCard(stats: WrappedStats, theme: Theme, l: Labels): string {
+  const { m } = l;
   const id = 'gw-heatmap';
   const accent = `url(#${id}-accent)`;
   const days = stats.calendar;
 
-  const headline = `${fmt(stats.totals.contributions)} contributions in ${stats.year}`;
-  const busiestMonth = stats.busiestMonth ? MONTH_NAMES[stats.busiestMonth.month] : null;
+  const headline = m.contributionsIn(l.fmt(stats.totals.contributions), stats.year);
+  const busiestMonth = stats.busiestMonth ? m.monthsFull[stats.busiestMonth.month] : null;
   const subline = busiestMonth
-    ? `${fmt(stats.activeDays)} active days · busiest month: ${busiestMonth}`
-    : `${fmt(stats.activeDays)} active days`;
+    ? m.activeDaysBusiestMonth(l.fmt(stats.activeDays), busiestMonth)
+    : m.activeDaysOnly(l.fmt(stats.activeDays));
 
   const parts: string[] = [
-    eyebrow(id, `Contribution calendar · ${stats.year}`),
+    eyebrow(id, m.heatmapEyebrow(stats.year)),
     text(MARGIN, 152, headline, { size: 52, weight: 800 }),
     text(MARGIN, 190, subline, { size: 24, fill: theme.muted }),
   ];
@@ -42,14 +44,13 @@ export function heatmapCard(stats: WrappedStats, theme: Theme): string {
       const column = Math.floor((i + offset) / 7);
       if (column - lastLabelColumn < 3) return;
       lastLabelColumn = column;
-      const month = MONTH_NAMES[Number(day.date.slice(5, 7)) - 1] ?? '';
-      parts.push(text(gridX + column * step, 240, month.slice(0, 3), { size: 14, fill: theme.muted }));
+      const month = m.months[Number(day.date.slice(5, 7)) - 1] ?? '';
+      parts.push(text(gridX + column * step, 240, month, { size: 14, fill: theme.muted }));
     });
 
     // Weekday labels (Mon / Wed / Fri).
     [1, 3, 5].forEach((row) => {
-      const label = (['Mon', 'Wed', 'Fri'] as const)[(row - 1) / 2];
-      parts.push(text(MARGIN, gridY + row * step + cell - 3, label ?? '', { size: 13, fill: theme.muted }));
+      parts.push(text(MARGIN, gridY + row * step + cell - 3, m.weekdaysShort[row] ?? '', { size: 13, fill: theme.muted }));
     });
 
     // One square per day.
@@ -67,24 +68,24 @@ export function heatmapCard(stats: WrappedStats, theme: Theme): string {
     const legendRight = gridX + columns * step - 4;
     const squares = theme.heat.length;
     const legendX = legendRight - squares * step - 78;
-    parts.push(text(legendX, legendY + 11, 'Less', { size: 14, fill: theme.muted, anchor: 'end' }));
+    parts.push(text(legendX, legendY + 11, m.less, { size: 14, fill: theme.muted, anchor: 'end' }));
     theme.heat.forEach((color, i) => {
       parts.push(`<rect x="${legendX + 10 + i * step}" y="${legendY}" width="${cell}" height="${cell}" rx="3" fill="${color}"/>`);
     });
-    parts.push(text(legendX + 16 + squares * step, legendY + 11, 'More', { size: 14, fill: theme.muted }));
+    parts.push(text(legendX + 16 + squares * step, legendY + 11, m.more, { size: 14, fill: theme.muted }));
   }
 
   // Three facts under the calendar.
   const factW = (CONTENT_WIDTH - 40) / 3;
   const streakRange = (s: WrappedStats['longestStreak']) =>
-    s.start && s.end ? (s.start === s.end ? shortDate(s.start) : `${shortDate(s.start)} to ${shortDate(s.end)}`) : 'No streak yet';
+    s.start && s.end ? (s.start === s.end ? l.shortDate(s.start) : m.dateRange(l.shortDate(s.start), l.shortDate(s.end))) : m.noStreak;
   const facts: [string, string, string][] = [
-    ['Longest streak', dayCount(stats.longestStreak.length), streakRange(stats.longestStreak)],
-    ['Current streak', dayCount(stats.currentStreak.length), streakRange(stats.currentStreak)],
+    [m.longestStreak, l.days(stats.longestStreak.length), streakRange(stats.longestStreak)],
+    [m.currentStreak, l.days(stats.currentStreak.length), streakRange(stats.currentStreak)],
     [
-      'Busiest day',
-      stats.busiestDay ? shortDate(stats.busiestDay.date) : 'None yet',
-      stats.busiestDay ? `${fmt(stats.busiestDay.count)} contributions` : 'Nothing recorded',
+      m.busiestDay,
+      stats.busiestDay ? l.shortDate(stats.busiestDay.date) : m.noneYet,
+      stats.busiestDay ? m.contributionsCount(l.fmt(stats.busiestDay.count)) : m.nothingRecorded,
     ],
   ];
   facts.forEach(([label, value, detail], i) => {

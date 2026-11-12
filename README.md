@@ -22,6 +22,7 @@ Spotify has Wrapped. Your commit history deserves one too. Git Wrapped turns a y
 
 - **Six cards**: summary, languages, top repositories, coding rhythm, contribution calendar and dev personality
 - **Dark and light themes**, plain SVG: sharp at any size, tiny, and works in a README
+- **English and Brazilian Portuguese** (`--lang pt-BR`), and adding a language is one object in one file
 - **CLI and HTTP API**: generate files locally, or serve cards you can embed with one line of Markdown
 - **Zero runtime dependencies**: just Node.js, the standard library and the GitHub GraphQL API
 - **Private by default**: private repository names never appear on a card
@@ -76,6 +77,7 @@ Happy with your cards? Post them with **#GitWrapped** and tag the repo so others
 | `-y, --year <year>` | Year to summarize (default: current year) |
 | `-c, --card <names>` | Comma separated cards, or `all` (default) |
 | `-t, --theme <theme>` | `dark` (default), `light` or `both` (files get a `-dark` / `-light` suffix) |
+| `-l, --lang <code>` | Language of the cards: `en` (default) or `pt-BR` |
 | `-o, --out <dir>` | Output directory (default: `./wrapped`) |
 | `--name <template>` | File name without extension, with `{login}`, `{year}` and `{card}` (default: `{login}-{year}-{card}`) |
 | `--tz=<hours>` | UTC offset for the hourly chart, e.g. `--tz=-3` (default: your system timezone) |
@@ -94,7 +96,9 @@ npm run cli -- octocat --year 2024 --card summary,heatmap --theme light
 | <img src="docs/examples/rhythm-dark.svg" alt="Coding rhythm card"> | <img src="docs/examples/heatmap-dark.svg" alt="Contribution calendar card"> |
 | <img src="docs/examples/personality-dark.svg" alt="Dev personality card"> | <img src="docs/examples/summary-light.svg" alt="Summary card in the light theme"> |
 
-Every card comes in a dark and a light theme (the last one above is the light summary).
+Every card comes in a dark and a light theme (the last one above is the light summary), and in English or Portuguese:
+
+<img src="docs/examples/pt-BR/personality-dark.svg" alt="Personality card in Portuguese" width="560">
 
 ## Keep your profile README up to date (GitHub Action)
 
@@ -141,6 +145,7 @@ Run the workflow once by hand from the **Actions** tab to create the first set o
 | `token` | `github.token` | Token used to read GitHub data. The default only sees public activity; pass a personal access token with `read:user` to include private contributions |
 | `year` | current year | Year to summarize |
 | `cards` | all | Comma separated list of cards |
+| `lang` | `en` | Language of the cards: `en` or `pt-BR` |
 | `tz` | UTC | UTC offset in hours for the hourly chart, e.g. `-3` |
 | `output-dir` | `gitwrapped` | Directory for the cards, relative to the repository root |
 | `commit` | `true` | Commit and push when the cards changed |
@@ -170,7 +175,7 @@ Open the server's home page for a live preview and a copy-paste snippet. Because
 
 | Endpoint | Returns |
 | --- | --- |
-| `GET /api/card/:card?user=&year=&theme=&tz=` | An SVG card |
+| `GET /api/card/:card?user=&year=&theme=&lang=&tz=` | An SVG card |
 | `GET /api/stats?user=&year=&tz=` | The computed stats as JSON |
 | `GET /api/demo/:card?theme=` | A card with sample data, no token needed |
 | `GET /healthz` | Health check |
@@ -250,7 +255,7 @@ Ideas that would make a great first contribution:
 - [ ] Publish the Action to the GitHub Marketplace
 - [ ] PNG export for platforms that do not accept SVG
 - [ ] More cards: pull request and review stats, most starred repository
-- [ ] Translated cards (the strings are all in `src/cards/`)
+- [ ] More languages (add one in `src/cards/i18n.ts`, see [CONTRIBUTING.md](CONTRIBUTING.md))
 - [ ] Team and organization wrapped
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) to get started.

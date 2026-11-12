@@ -1,3 +1,4 @@
+import assert from 'node:assert/strict';
 import type { DayContribution, RawYearData } from '../src/types.ts';
 
 /** Builds a full calendar year where `counts` maps `YYYY-MM-DD` to a contribution count (default 0). */
@@ -89,4 +90,20 @@ export function githubFetchMock() {
     });
   }) as typeof fetch;
   return { fetchImpl, calls };
+}
+
+/** Minimal well-formedness check: every opened element is closed in the right order. */
+export function assertWellFormed(svg: string): void {
+  const stack: string[] = [];
+  const tag = /<(\/?)([a-zA-Z][\w:-]*)((?:"[^"]*"|'[^']*'|[^'">])*?)(\/?)>/g;
+  for (const match of svg.matchAll(tag)) {
+    const [, closing, name = '', , selfClosing] = match;
+    if (selfClosing) continue;
+    if (closing) {
+      assert.equal(stack.pop(), name, `unexpected </${name}>`);
+    } else {
+      stack.push(name);
+    }
+  }
+  assert.deepEqual(stack, [], 'unclosed elements');
 }

@@ -1,31 +1,45 @@
 import type { WrappedStats } from '../types.ts';
-import { CONTENT_WIDTH, MARGIN, eyebrow, fmt, frame, panel, pill, pillWidth, text } from './svg.ts';
+import type { Labels } from './i18n.ts';
+import { CONTENT_WIDTH, MARGIN, eyebrow, frame, panel, pill, pillWidth, text } from './svg.ts';
 import type { Theme } from './svg.ts';
 
-export function personalityCard(stats: WrappedStats, theme: Theme): string {
+const TITLE_MAX_SIZE = 84;
+/** Rough average glyph width of the bold title font, as a fraction of the font size. */
+const TITLE_GLYPH_WIDTH = 0.58;
+
+export function personalityCard(stats: WrappedStats, theme: Theme, l: Labels): string {
+  const { m } = l;
   const id = 'gw-personality';
   const accent = `url(#${id}-accent)`;
   const { personality } = stats;
+  const archetype = l.archetype(personality.id);
+
+  // Long titles (some languages need them) shrink so they never run past the card.
+  const titleSize = Math.min(
+    TITLE_MAX_SIZE,
+    Math.floor(CONTENT_WIDTH / (Math.max(1, archetype.title.length) * TITLE_GLYPH_WIDTH)),
+  );
 
   const parts: string[] = [
-    eyebrow(id, `Your dev personality · ${stats.year}`),
-    text(MARGIN, 190, personality.title, { size: 84, weight: 800, fill: accent }),
-    text(MARGIN, 244, personality.tagline, { size: 28, fill: theme.muted }),
+    eyebrow(id, m.personalityEyebrow(stats.year)),
+    text(MARGIN, 190, archetype.title, { size: titleSize, weight: 800, fill: accent }),
+    text(MARGIN, 244, archetype.tagline, { size: 28, fill: theme.muted }),
   ];
 
   // Primary trait highlighted, then the secondary ones.
   let x = MARGIN;
   personality.traits.forEach((trait, i) => {
-    parts.push(pill(x, 292, trait, theme, i === 0 ? theme.accentB : undefined));
-    x += pillWidth(trait) + 14;
+    const label = l.trait(trait);
+    parts.push(pill(x, 292, label, theme, i === 0 ? theme.accentB : undefined));
+    x += pillWidth(label) + 14;
   });
 
   const factW = (CONTENT_WIDTH - 40) / 3;
-  const languageCount = stats.languages.filter((l) => l.name !== 'Other').length;
+  const languageCount = stats.languages.filter((lang) => lang.name !== 'Other').length;
   const facts: [string, string][] = [
-    [fmt(stats.activeDays), 'days with activity'],
-    [fmt(stats.longestStreak.length), 'day longest streak'],
-    [fmt(languageCount), languageCount === 1 ? 'language used' : 'languages used'],
+    [l.fmt(stats.activeDays), m.daysWithActivity],
+    [l.fmt(stats.longestStreak.length), m.streakLabel],
+    [l.fmt(languageCount), m.languagesUsed(languageCount)],
   ];
   facts.forEach(([value, label], i) => {
     const fx = MARGIN + i * (factW + 20);

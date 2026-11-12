@@ -36,7 +36,7 @@ CI checks the same things, and also fails if `docs/examples` is out of date with
 | `src/github.ts` | GraphQL client and data normalization |
 | `src/stats.ts` | Pure functions that turn raw data into stats |
 | `src/personality.ts` | The rules behind each dev personality |
-| `src/cards/` | One file per card, plus the shared SVG helpers |
+| `src/cards/` | One file per card, the shared SVG helpers and `i18n.ts` with all the text |
 | `src/cli.ts` | Argument parsing and the command line flow |
 | `src/server.ts` | The HTTP API |
 | `test/` | Tests, using `node:test` |
@@ -52,10 +52,22 @@ CI checks the same things, and also fails if `docs/examples` is out of date with
 
 ## Adding a card
 
-1. Create `src/cards/<name>.ts` exporting a function `(stats, theme) => string`. The existing cards are good templates.
-2. Register it in `src/cards/index.ts`.
-3. Run `npm test` (the rendering tests pick it up automatically) and `npm run examples`.
-4. Mention it in the README.
+1. Create `src/cards/<name>.ts` exporting a function `(stats, theme, labels) => string`. The existing cards are good templates.
+2. Put every visible string in `src/cards/i18n.ts` (for each language) and read it from `labels.m`. Use `labels.fmt`, `labels.days` and friends for numbers and dates.
+3. Register the card in `src/cards/index.ts`.
+4. Run `npm test` (the rendering tests pick it up automatically) and `npm run examples`.
+5. Mention it in the README.
+
+## Adding a language
+
+All the text on the cards lives in `src/cards/i18n.ts`.
+
+1. Add the language code to `LOCALES` and a `Messages` object to `MESSAGES`. The type checker lists every string that is missing.
+2. Teach `parseLocale` the spellings people will use (`es`, `es-ES`, and so on).
+3. Run `npm test`. The tests check that your language has every key, translates every dev personality, and renders every card without producing broken text.
+4. Look at the result with `npm run cli -- --demo --lang <code>`. Some languages need more room than English, so check the long strings, such as the personality titles and the sentence under the rhythm headline.
+
+Please write the text the way a developer would say it, not as a literal translation.
 
 ## Reporting bugs
 

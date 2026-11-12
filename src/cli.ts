@@ -2,8 +2,8 @@ import { mkdir, writeFile } from 'node:fs/promises';
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { parseArgs } from 'node:util';
-import { CARD_NAMES, isCardName, isThemeName, renderCard } from './cards/index.ts';
-import type { CardName, ThemeName } from './cards/index.ts';
+import { CARD_NAMES, LOCALES, isCardName, isThemeName, parseLocale, renderCard } from './cards/index.ts';
+import type { CardName, Locale, ThemeName } from './cards/index.ts';
 import { days, hourLabel, shortDate } from './cards/svg.ts';
 import { demoData } from './demo.ts';
 import { GitWrappedError } from './errors.ts';
@@ -18,6 +18,8 @@ export interface CliOptions {
   out: string;
   /** One theme, or both when `--theme both` is used. */
   themes: ThemeName[];
+  /** Language of the text on the cards. */
+  locale: Locale;
   /** File name template without extension. Supports {login}, {year} and {card}. */
   name: string;
   /** Undefined means "use the system timezone" (or UTC for demo data). */
@@ -52,6 +54,7 @@ Options
                         Cards: ${CARD_NAMES.join(', ')}
   -t, --theme <theme>   dark, light or both (default: dark). With "both", files get
                         a -dark or -light suffix
+  -l, --lang <code>     Language of the cards: ${LOCALES.join(', ')} (default: en)
   -o, --out <dir>       Output directory (default: ./wrapped)
       --name <template> File name without extension (default: {login}-{year}-{card})
                         Use e.g. --name {card} for names that stay the same every year
@@ -103,6 +106,9 @@ export function parseCli(argv: string[], now: Date = new Date()): CliOptions {
     throw invalid(`Unknown theme "${themeArg}". Use dark, light or both.`);
   }
 
+  const locale = values.lang === undefined ? 'en' : parseLocale(values.lang);
+  if (!locale) throw invalid(`Unknown language "${values.lang}". Available: ${LOCALES.join(', ')}.`);
+
   const name = values.name ?? '{login}-{year}-{card}';
   // The name becomes a file name inside --out, so it must not be able to point anywhere else.
   if (name.trim() === '' || /[\\/\0]/.test(name) || name.includes('..')) {
@@ -134,6 +140,7 @@ export function parseCli(argv: string[], now: Date = new Date()): CliOptions {
     cards,
     out: values.out ?? 'wrapped',
     themes,
+    locale,
     name,
     utcOffsetMinutes,
     json: values.json ?? false,
@@ -147,6 +154,7 @@ const OPTION_SPEC = {
   year: { type: 'string', short: 'y' },
   card: { type: 'string', short: 'c' },
   theme: { type: 'string', short: 't' },
+  lang: { type: 'string', short: 'l' },
   out: { type: 'string', short: 'o' },
   name: { type: 'string' },
   tz: { type: 'string' },
@@ -269,7 +277,7 @@ export async function run(argv: string[], io: CliIO): Promise<number> {
           .replaceAll('{year}', String(stats.year))
           .replaceAll('{card}', card);
         const file = path.join(outDir, `${base}${suffixThemes ? `-${theme}` : ''}.svg`);
-        await writeFile(file, renderCard(card, stats, theme), 'utf8');
+        await writeFile(file, renderCard(card, stats, theme, options.locale), 'utf8');
         written.push(file);
       }
     }

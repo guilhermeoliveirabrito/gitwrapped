@@ -1,5 +1,7 @@
 import type { WrappedStats } from '../types.ts';
 import { heatmapCard } from './heatmap.ts';
+import { labelsFor } from './i18n.ts';
+import type { Locale } from './i18n.ts';
 import { languagesCard } from './languages.ts';
 import { personalityCard } from './personality.ts';
 import { reposCard } from './repos.ts';
@@ -10,6 +12,8 @@ import type { ThemeName } from './svg.ts';
 
 export { THEME_NAMES, isThemeName } from './svg.ts';
 export type { ThemeName } from './svg.ts';
+export { LOCALES, isLocale, parseLocale } from './i18n.ts';
+export type { Locale } from './i18n.ts';
 
 export const CARD_NAMES = ['summary', 'languages', 'repos', 'rhythm', 'heatmap', 'personality'] as const;
 export type CardName = (typeof CARD_NAMES)[number];
@@ -28,17 +32,22 @@ const RENDERERS = {
 } as const;
 
 /** Renders one card as a standalone 1200x630 SVG document. */
-export function renderCard(name: CardName, stats: WrappedStats, theme: ThemeName = 'dark'): string {
-  return RENDERERS[name](stats, THEMES[theme]);
+export function renderCard(
+  name: CardName,
+  stats: WrappedStats,
+  theme: ThemeName = 'dark',
+  locale: Locale = 'en',
+): string {
+  return RENDERERS[name](stats, THEMES[theme], labelsFor(locale));
 }
 
 /** A card that explains what went wrong; used so `<img>` embeds fail visibly instead of showing a broken icon. */
-export function renderErrorCard(message: string, theme: ThemeName = 'dark'): string {
+export function renderErrorCard(message: string, theme: ThemeName = 'dark', locale: Locale = 'en'): string {
   const t = THEMES[theme];
   const id = 'gw-error';
   const body = [
     eyebrow(id, 'Git Wrapped'),
-    text(MARGIN, 240, 'Could not generate this card', { size: 56, weight: 800 }),
+    text(MARGIN, 240, labelsFor(locale).m.errorTitle, { size: 56, weight: 800 }),
     text(MARGIN, 300, truncate(message, 70), { size: 28, fill: t.muted }),
   ].join('\n');
   return frame(body, t, { id, title: 'Git Wrapped error', description: message });

@@ -3,23 +3,7 @@ import { describe, it } from 'node:test';
 import { CARD_NAMES, THEME_NAMES, renderCard, renderErrorCard } from '../src/cards/index.ts';
 import { demoData } from '../src/demo.ts';
 import { computeStats } from '../src/stats.ts';
-import { AFTER_2025, makeRaw } from './helpers.ts';
-
-/** Minimal well-formedness check: every opened element is closed in the right order. */
-function assertWellFormed(svg: string): void {
-  const stack: string[] = [];
-  const tag = /<(\/?)([a-zA-Z][\w:-]*)((?:"[^"]*"|'[^']*'|[^'">])*?)(\/?)>/g;
-  for (const match of svg.matchAll(tag)) {
-    const [, closing, name = '', , selfClosing] = match;
-    if (selfClosing) continue;
-    if (closing) {
-      assert.equal(stack.pop(), name, `unexpected </${name}>`);
-    } else {
-      stack.push(name);
-    }
-  }
-  assert.deepEqual(stack, [], 'unclosed elements');
-}
+import { AFTER_2025, assertWellFormed, makeRaw } from './helpers.ts';
 
 const demoStats = computeStats(demoData(2025), { now: AFTER_2025 });
 const emptyStats = computeStats(makeRaw(), { now: AFTER_2025 });

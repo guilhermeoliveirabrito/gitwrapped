@@ -16,6 +16,7 @@ All notable changes to this project are documented here. The format is based on
   preview, an in-memory cache and per-client rate limiting.
 - GitHub Action that regenerates the cards and commits them to a profile repository.
 - Dockerfile for self-hosting.
+- Cards in English and Brazilian Portuguese (`--lang`, `?lang=` and the Action's `lang` input).
 - English and Portuguese READMEs.
 
 ### Fixed

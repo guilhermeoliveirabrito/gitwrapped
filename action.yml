@@ -21,6 +21,9 @@ inputs:
   cards:
     description: Comma separated list of cards (summary, languages, repos, rhythm, heatmap, personality). Defaults to all.
     default: ''
+  lang:
+    description: Language of the text on the cards, en or pt-BR. Defaults to en.
+    default: ''
   tz:
     description: UTC offset in hours for the hourly chart, for example -3 or 5.5. Defaults to UTC.
     default: ''
@@ -57,6 +60,7 @@ runs:
         GW_YEAR: ${{ inputs.year }}
         GW_CARDS: ${{ inputs.cards }}
         GW_TZ: ${{ inputs.tz }}
+        GW_LANG: ${{ inputs.lang }}
         GW_OUTPUT_DIR: ${{ inputs.output-dir }}
         GW_COMMIT: ${{ inputs.commit }}
         GW_COMMIT_MESSAGE: ${{ inputs.commit-message }}

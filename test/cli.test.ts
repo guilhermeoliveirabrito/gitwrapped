@@ -53,6 +53,13 @@ describe('parseCli', () => {
     assert.equal(parseCli(['x', '--tz=5.5'], NOW).utcOffsetMinutes, 330);
   });
 
+  it('reads the language and normalizes its spelling', () => {
+    assert.equal(parseCli(['x'], NOW).locale, 'en');
+    assert.equal(parseCli(['x', '--lang', 'pt-br'], NOW).locale, 'pt-BR');
+    assert.equal(parseCli(['x', '-l', 'PT'], NOW).locale, 'pt-BR');
+    assert.throws(() => parseCli(['x', '--lang', 'fr'], NOW), invalidInput);
+  });
+
   it('expands --theme both into both themes', () => {
     assert.deepEqual(parseCli(['x', '--theme', 'both'], NOW).themes, ['dark', 'light']);
   });
@@ -147,6 +154,15 @@ describe('run', () => {
     const light = await readFile(path.join(out, 'summary-light.svg'), 'utf8');
     assert.notEqual(dark, light);
     assert.match(c.stdout(), /Saved 4 cards/);
+  });
+
+  it('writes the cards in the requested language', async () => {
+    const out = path.join(dir, 'pt');
+    const c = capture({ cwd: dir });
+    assert.equal(await run(['--demo', '-c', 'summary', '--lang', 'pt-BR', '-o', out], c.io), 0);
+    const svg = await readFile(path.join(out, 'sample-dev-2026-summary.svg'), 'utf8');
+    assert.ok(svg.includes('contribuições'));
+    assert.ok(svg.includes('A Coruja Noturna'));
   });
 
   it('prints parseable JSON with --json and writes no files', async () => {

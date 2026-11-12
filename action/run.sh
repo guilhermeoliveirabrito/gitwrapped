@@ -37,6 +37,9 @@ fi
 if [ -n "${GW_TZ:-}" ]; then
   args+=("--tz=$GW_TZ")
 fi
+if [ -n "${GW_LANG:-}" ]; then
+  args+=(--lang "$GW_LANG")
+fi
 if [ "${GW_DEMO:-false}" = "true" ]; then
   args+=(--demo)
 else

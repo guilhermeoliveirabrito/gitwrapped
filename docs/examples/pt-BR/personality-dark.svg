@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="gw-personality-t gw-personality-d">
+<title id="gw-personality-t">Dev personality of sample-dev in 2025</title>
+<desc id="gw-personality-d">The Night Owl. The best commits happen after the world goes to sleep.</desc>
+<defs>
+<linearGradient id="gw-personality-bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0b0f1a"/><stop offset="1" stop-color="#161a33"/></linearGradient>
+<linearGradient id="gw-personality-accent" gradientUnits="userSpaceOnUse" x1="64" y1="0" x2="1136" y2="0"><stop offset="0" stop-color="#8b5cf6"/><stop offset="0.55" stop-color="#ec4899"/><stop offset="1" stop-color="#22d3ee"/></linearGradient>
+<radialGradient id="gw-personality-glow-a"><stop offset="0" stop-color="#8b5cf6" stop-opacity="0.35"/><stop offset="1" stop-color="#8b5cf6" stop-opacity="0"/></radialGradient>
+<radialGradient id="gw-personality-glow-b"><stop offset="0" stop-color="#22d3ee" stop-opacity="0.22"/><stop offset="1" stop-color="#22d3ee" stop-opacity="0"/></radialGradient>
+</defs>
+<rect width="1200" height="630" fill="url(#gw-personality-bg)"/>
+<circle cx="1080" cy="40" r="360" fill="url(#gw-personality-glow-a)"/>
+<circle cx="80" cy="620" r="320" fill="url(#gw-personality-glow-b)"/>
+<g font-family="-apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif" fill="#f8fafc">
+<text x="64" y="88" font-size="18" font-weight="700" fill="url(#gw-personality-accent)" letter-spacing="4">SUA PERSONALIDADE DEV · 2025</text>
+<text x="64" y="190" font-size="84" font-weight="800" fill="url(#gw-personality-accent)">A Coruja Noturna</text>
+<text x="64" y="244" font-size="28" font-weight="400" fill="#94a3b8">Os melhores commits acontecem depois que o mundo dorme.</text>
+<rect x="64" y="292" width="219" height="44" rx="22" fill="#ec4899" fill-opacity="0.18"/><text x="173.5" y="321" font-size="20" font-weight="600" fill="#f8fafc" text-anchor="middle">Coruja noturna</text>
+<rect x="297" y="292" width="294" height="44" rx="22" fill="#ffffff" fill-opacity="0.096"/><text x="444" y="321" font-size="20" font-weight="600" fill="#f8fafc" text-anchor="middle">Construtor constante</text>
+<rect x="605" y="292" width="294" height="44" rx="22" fill="#ffffff" fill-opacity="0.096"/><text x="752" y="321" font-size="20" font-weight="600" fill="#f8fafc" text-anchor="middle">Máquina de sequência</text>
+<rect x="64" y="400" width="344" height="140" rx="20" fill="#ffffff" fill-opacity="0.06"/>
+<text x="92" y="470" font-size="56" font-weight="800">252</text>
+<text x="92" y="508" font-size="20" font-weight="400" fill="#94a3b8">dias com atividade</text>
+<rect x="428" y="400" width="344" height="140" rx="20" fill="#ffffff" fill-opacity="0.06"/>
+<text x="456" y="470" font-size="56" font-weight="800">35</text>
+<text x="456" y="508" font-size="20" font-weight="400" fill="#94a3b8">dias na maior sequência</text>
+<rect x="792" y="400" width="344" height="140" rx="20" fill="#ffffff" fill-opacity="0.06"/>
+<text x="820" y="470" font-size="56" font-weight="800">6</text>
+<text x="820" y="508" font-size="20" font-weight="400" fill="#94a3b8">linguagens usadas</text>
+<text x="64" y="604" font-size="18" font-weight="700" fill="url(#gw-personality-accent)">gitwrapped</text>
+<text x="1136" y="604" font-size="16" font-weight="400" fill="#94a3b8" text-anchor="end">github.com/guilhermeoliveirabrito/gitwrapped</text>
+</g>
+</svg>

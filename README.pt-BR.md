@@ -7,7 +7,7 @@ Cards compartilháveis para qualquer perfil do GitHub: linguagens, sequências, 
 
 [English](README.md)
 
-<img src="docs/examples/summary-dark.svg" alt="Card de resumo do Git Wrapped" width="720">
+<img src="docs/examples/pt-BR/summary-dark.svg" alt="Card de resumo do Git Wrapped" width="720">
 
 </div>
 
@@ -17,6 +17,7 @@ O Spotify tem o Wrapped. O seu histórico de commits também merece um. O Git Wr
 
 - **Seis cards**: resumo, linguagens, repositórios mais ativos, ritmo de código, calendário de contribuições e personalidade dev
 - **Temas escuro e claro**, em SVG puro: nítido em qualquer tamanho e funciona em README
+- **Português e inglês**: use `--lang pt-BR` para os cards saírem em português
 - **CLI e API HTTP**: gere arquivos localmente ou rode um servidor e embuta os cards com uma linha de Markdown
 - **Zero dependências em runtime**: só Node.js, a biblioteca padrão e a API GraphQL do GitHub
 - **Privado por padrão**: nomes de repositórios privados nunca aparecem nos cards
@@ -39,10 +40,10 @@ Para usar o seu perfil, crie um [token de acesso pessoal](https://github.com/set
 
 ```bash
 export GITHUB_TOKEN=ghp_seu_token
-npm run cli -- seu-usuario --tz=-3
+npm run cli -- seu-usuario --lang pt-BR --tz=-3
 ```
 
-Os cards são salvos em `./wrapped`. A opção `--tz` define o fuso usado no gráfico por hora (por padrão, o fuso do seu sistema).
+Os cards são salvos em `./wrapped`. A opção `--lang pt-BR` deixa os textos em português e a opção `--tz` define o fuso usado no gráfico por hora (por padrão, o fuso do seu sistema).
 
 ## Manter o README do perfil atualizado (GitHub Action)
 
@@ -68,6 +69,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: guilhermeoliveirabrito/gitwrapped@main
         with:
+          lang: "pt-BR"
           tz: "-3"
 ```
 
@@ -93,7 +95,7 @@ npm run build && npm start
 ```
 
 ```markdown
-![Meu 2025](https://seu-host/api/card/summary?user=seu-usuario&year=2025)
+![Meu 2025](https://seu-host/api/card/summary?user=seu-usuario&year=2025&lang=pt-BR)
 ```
 
 Também há um `Dockerfile` para hospedar por conta própria. Veja a seção de API e Docker no [README em inglês](README.md#embed-with-the-http-server).

@@ -1,7 +1,7 @@
 import http from 'node:http';
 import type { IncomingMessage, ServerResponse } from 'node:http';
-import { isCardName, isThemeName, renderCard, renderErrorCard } from './cards/index.ts';
-import type { CardName, ThemeName } from './cards/index.ts';
+import { LOCALES, isCardName, isThemeName, parseLocale, renderCard, renderErrorCard } from './cards/index.ts';
+import type { CardName, Locale, ThemeName } from './cards/index.ts';
 import { demoData } from './demo.ts';
 import { GitWrappedError, httpStatusFor } from './errors.ts';
 import { fetchYearData, isValidLogin } from './github.ts';
@@ -36,7 +36,14 @@ interface CardQuery {
   login: string;
   year: number;
   theme: ThemeName;
+  locale: Locale;
   utcOffsetMinutes: number;
+}
+
+/** How an image or error card is drawn. */
+interface Look {
+  theme: ThemeName;
+  locale: Locale;
 }
 
 function invalid(message: string): GitWrappedError {
@@ -47,6 +54,14 @@ function parseTheme(params: URLSearchParams): ThemeName {
   const theme = params.get('theme') ?? 'dark';
   if (!isThemeName(theme)) throw invalid('Unknown theme. Use dark or light.');
   return theme;
+}
+
+function parseLang(params: URLSearchParams): Locale {
+  const raw = params.get('lang');
+  if (raw === null || raw === '') return 'en';
+  const locale = parseLocale(raw);
+  if (!locale) throw invalid(`Unknown lang. Use ${LOCALES.join(' or ')}.`);
+  return locale;
 }
 
 function parseCardName(value: string | undefined): CardName {
@@ -73,7 +88,7 @@ function parseQuery(params: URLSearchParams, now: Date): CardQuery {
     throw invalid(`year must be between 2008 and ${now.getUTCFullYear()}.`);
   }
 
-  return { login, year, theme: parseTheme(params), utcOffsetMinutes: parseTimezone(params) };
+  return { login, year, theme: parseTheme(params), locale: parseLang(params), utcOffsetMinutes: parseTimezone(params) };
 }
 
 export function createServer(options: ServerOptions = {}): http.Server {
@@ -173,7 +188,7 @@ export function createServer(options: ServerOptions = {}): http.Server {
     res: ServerResponse,
     error: unknown,
     kind: 'svg' | 'json',
-    theme: ThemeName = 'dark',
+    look: Look = { theme: 'dark', locale: 'en' },
     extra: Record<string, string> = {},
   ): void {
     let code = 'API_ERROR';
@@ -188,7 +203,7 @@ export function createServer(options: ServerOptions = {}): http.Server {
     }
 
     if (kind === 'svg') {
-      send(res, status, renderErrorCard(message, theme), {
+      send(res, status, renderErrorCard(message, look.theme, look.locale), {
         'Content-Type': 'image/svg+xml; charset=utf-8',
         'Content-Security-Policy': SVG_CSP,
         'Cache-Control': 'no-store',
@@ -203,9 +218,14 @@ export function createServer(options: ServerOptions = {}): http.Server {
     }
   }
 
-  function safeTheme(params: URLSearchParams): ThemeName {
+  /** Error cards must always render, so unknown values quietly fall back to the defaults. */
+  function safeLook(params: URLSearchParams): Look {
     const theme = params.get('theme');
-    return theme && isThemeName(theme) ? theme : 'dark';
+    const lang = params.get('lang');
+    return {
+      theme: theme && isThemeName(theme) ? theme : 'dark',
+      locale: (lang && parseLocale(lang)) || 'en',
+    };
   }
 
   async function handle(req: IncomingMessage, res: ServerResponse): Promise<void> {
@@ -240,7 +260,7 @@ export function createServer(options: ServerOptions = {}): http.Server {
     const kind = pathname === '/api/stats' ? 'json' : 'svg';
     const retryAfter = throttle(req);
     if (retryAfter > 0) {
-      sendError(res, new GitWrappedError('RATE_LIMITED', 'Too many requests. Please slow down.'), kind, safeTheme(searchParams), {
+      sendError(res, new GitWrappedError('RATE_LIMITED', 'Too many requests. Please slow down.'), kind, safeLook(searchParams), {
         'Retry-After': String(retryAfter),
       });
       return;
@@ -251,8 +271,9 @@ export function createServer(options: ServerOptions = {}): http.Server {
       if (demo) {
         const card = parseCardName(demo[1]);
         const theme = parseTheme(searchParams);
+        const locale = parseLang(searchParams);
         const stats = computeStats(demoData(clock().getUTCFullYear() - 1), { now: clock() });
-        sendSvg(res, renderCard(card, stats, theme), DEMO_CACHE);
+        sendSvg(res, renderCard(card, stats, theme, locale), DEMO_CACHE);
         return;
       }
 
@@ -262,7 +283,7 @@ export function createServer(options: ServerOptions = {}): http.Server {
         const query = parseQuery(searchParams, clock());
         const raw = await loadYear(query.login, query.year);
         const stats = computeStats(raw, { utcOffsetMinutes: query.utcOffsetMinutes, now: clock() });
-        sendSvg(res, renderCard(card, stats, query.theme), CARD_CACHE);
+        sendSvg(res, renderCard(card, stats, query.theme, query.locale), CARD_CACHE);
         return;
       }
 
@@ -276,7 +297,7 @@ export function createServer(options: ServerOptions = {}): http.Server {
 
       send(res, 404, 'Not Found', { 'Content-Type': 'text/plain; charset=utf-8' });
     } catch (error) {
-      sendError(res, error, kind, safeTheme(searchParams));
+      sendError(res, error, kind, safeLook(searchParams));
     }
   }
 

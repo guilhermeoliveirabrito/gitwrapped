@@ -1,20 +1,17 @@
 import type { WrappedStats } from '../types.ts';
+import type { Labels } from './i18n.ts';
 import { CONTENT_WIDTH, MARGIN, eyebrow, esc, frame, r, text, truncate } from './svg.ts';
 import type { Theme } from './svg.ts';
 
-export function languagesCard(stats: WrappedStats, theme: Theme): string {
+export function languagesCard(stats: WrappedStats, theme: Theme, l: Labels): string {
+  const { m } = l;
   const id = 'gw-languages';
   const top = stats.languages[0];
-  const parts: string[] = [eyebrow(id, `Top languages · ${stats.year}`)];
+  const parts: string[] = [eyebrow(id, m.languagesEyebrow(stats.year))];
 
   if (!top) {
-    parts.push(text(MARGIN, 152, 'No language data yet', { size: 52, weight: 800 }));
-    parts.push(
-      text(MARGIN, 190, 'Commit to repositories with a detected language to see this card.', {
-        size: 24,
-        fill: theme.muted,
-      }),
-    );
+    parts.push(text(MARGIN, 152, m.noLanguages, { size: 52, weight: 800 }));
+    parts.push(text(MARGIN, 190, m.noLanguagesSub, { size: 24, fill: theme.muted }));
     return frame(parts.join('\n'), theme, {
       id,
       title: `Languages for ${stats.login}`,
@@ -22,8 +19,8 @@ export function languagesCard(stats: WrappedStats, theme: Theme): string {
     });
   }
 
-  parts.push(text(MARGIN, 152, `${truncate(top.name, 22)} led your ${stats.year}`, { size: 52, weight: 800 }));
-  parts.push(text(MARGIN, 190, "Share of your commits, by each repository's main language", { size: 24, fill: theme.muted }));
+  parts.push(text(MARGIN, 152, m.languagesLed(truncate(top.name, 22), stats.year), { size: 52, weight: 800 }));
+  parts.push(text(MARGIN, 190, m.languagesSub, { size: 24, fill: theme.muted }));
 
   // Stacked bar, clipped to a rounded rectangle.
   const barY = 232;
@@ -53,6 +50,6 @@ export function languagesCard(stats: WrappedStats, theme: Theme): string {
   return frame(parts.join('\n'), theme, {
     id,
     title: `Top languages for ${stats.login} in ${stats.year}`,
-    description: stats.languages.map((l) => `${l.name} ${l.percent}%`).join(', '),
+    description: stats.languages.map((lang) => `${lang.name} ${lang.percent}%`).join(', '),
   });
 }

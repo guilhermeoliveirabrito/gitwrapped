@@ -14,7 +14,7 @@ export const LANDING_HTML = `<!doctype html>
   .eyebrow { letter-spacing:.3em; font-weight:700; font-size:13px; text-transform:uppercase; background:linear-gradient(90deg,var(--a),var(--b),var(--c)); -webkit-background-clip:text; background-clip:text; color:transparent; }
   h1 { font-size: clamp(36px, 7vw, 64px); margin: 10px 0 8px; line-height:1.05; }
   p.lead { color: var(--muted); font-size: 18px; max-width: 640px; margin: 0 0 32px; }
-  form { display:grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 12px; background: var(--panel); padding: 16px; border-radius: 16px; }
+  form { display:grid; grid-template-columns: 2fr 1fr 1.2fr 1fr 1.2fr; gap: 12px; background: var(--panel); padding: 16px; border-radius: 16px; }
   label { display:flex; flex-direction:column; gap:6px; font-size:12px; color:var(--muted); text-transform:uppercase; letter-spacing:.08em; }
   input, select, button { font: inherit; font-size:16px; color: var(--text); background:#0b0f1a; border:1px solid #ffffff22; border-radius:10px; padding:10px 12px; }
   input:focus, select:focus, button:focus-visible { outline:2px solid var(--a); outline-offset:1px; }
@@ -47,6 +47,7 @@ export const LANDING_HTML = `<!doctype html>
       <option value="personality">Personality</option>
     </select></label>
     <label>Theme<select id="theme"><option value="dark">Dark</option><option value="light">Light</option></select></label>
+    <label>Language<select id="lang"><option value="en">English</option><option value="pt-BR">Português</option></select></label>
   </form>
   <p id="note"></p>
 
@@ -62,14 +63,14 @@ export const LANDING_HTML = `<!doctype html>
 <script>
 (function () {
   var $ = function (id) { return document.getElementById(id); };
-  var user = $('user'), year = $('year'), card = $('card'), theme = $('theme');
+  var user = $('user'), year = $('year'), card = $('card'), theme = $('theme'), lang = $('lang');
   var img = $('preview'), embed = $('embed'), note = $('note'), copy = $('copy');
   var timer;
   year.value = new Date().getFullYear();
 
   function path() {
     var u = user.value.trim().replace(/^@/, '');
-    var qs = new URLSearchParams({ theme: theme.value });
+    var qs = new URLSearchParams({ theme: theme.value, lang: lang.value });
     if (u) {
       qs.set('user', u);
       qs.set('year', year.value);
@@ -90,6 +91,7 @@ export const LANDING_HTML = `<!doctype html>
   year.addEventListener('input', schedule);
   card.addEventListener('change', update);
   theme.addEventListener('change', update);
+  lang.addEventListener('change', update);
   copy.addEventListener('click', function () {
     navigator.clipboard.writeText(embed.textContent).then(function () {
       copy.textContent = 'Copied!';

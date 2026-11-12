@@ -19,4 +19,12 @@ for (const theme of THEME_NAMES) {
     await writeFile(path.join(outDir, `${card}-${theme}.svg`), renderCard(card, stats, theme), 'utf8');
   }
 }
-console.log(`Wrote ${CARD_NAMES.length * THEME_NAMES.length} cards to ${path.relative(root, outDir)}`);
+
+// Portuguese cards live in their own folder, dark theme only.
+const ptDir = path.join(outDir, 'pt-BR');
+await mkdir(ptDir, { recursive: true });
+for (const card of CARD_NAMES) {
+  await writeFile(path.join(ptDir, `${card}-dark.svg`), renderCard(card, stats, 'dark', 'pt-BR'), 'utf8');
+}
+
+console.log(`Wrote ${CARD_NAMES.length * THEME_NAMES.length + CARD_NAMES.length} cards to ${path.relative(root, outDir)}`);
