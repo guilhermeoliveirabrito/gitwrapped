@@ -126,6 +126,27 @@ describe('fetchYearData', () => {
     assert.equal(calls[0]?.body.variables.to, '2025-06-15T10:00:00.000Z');
   });
 
+  it('drops days that have not happened yet in the current year', async () => {
+    const payload = structuredClone(userPayload);
+    payload.data.user.contributionsCollection.contributionCalendar.weeks = [
+      {
+        contributionDays: [
+          { date: '2025-06-14', contributionCount: 3 },
+          { date: '2025-06-15', contributionCount: 1 },
+          { date: '2025-06-16', contributionCount: 0 }, // tomorrow
+          { date: '2025-06-17', contributionCount: 0 },
+        ],
+      },
+    ];
+    const { fetchImpl } = mockFetch([json(payload), json(historyPayload)]);
+    const now = new Date('2025-06-15T10:00:00Z');
+    const data = await fetchYearData('octocat', { token: 't', year: 2025, fetchImpl, now });
+    assert.deepEqual(
+      data.days.map((d) => d.date),
+      ['2025-06-14', '2025-06-15'],
+    );
+  });
+
   it('still succeeds when the hourly sample cannot be fetched', async () => {
     const { fetchImpl } = mockFetch([json(userPayload), json({ errors: [{ message: 'boom' }] }, 502)]);
     const data = await fetchYearData('octocat', { token: 't', year: 2025, fetchImpl, now: NOW });

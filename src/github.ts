@@ -194,10 +194,13 @@ export async function fetchYearData(login: string, options: FetchOptions): Promi
 
   const collection = user.contributionsCollection;
 
+  // The calendar is made of whole weeks, so it can include days from the neighbouring years and,
+  // for the current year, days that have not happened yet. Keep only the requested period.
+  const lastDay = to.slice(0, 10);
   const byDate = new Map<string, number>();
   for (const week of collection.contributionCalendar.weeks) {
     for (const day of week.contributionDays) {
-      if (day.date.startsWith(`${year}-`)) byDate.set(day.date, day.contributionCount);
+      if (day.date.startsWith(`${year}-`) && day.date <= lastDay) byDate.set(day.date, day.contributionCount);
     }
   }
   const days: DayContribution[] = [...byDate.entries()]
