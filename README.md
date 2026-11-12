@@ -73,8 +73,9 @@ Cards are written to `./wrapped` and a summary is printed in the terminal:
 | --- | --- |
 | `-y, --year <year>` | Year to summarize (default: current year) |
 | `-c, --card <names>` | Comma separated cards, or `all` (default) |
-| `-t, --theme <theme>` | `dark` (default) or `light` |
+| `-t, --theme <theme>` | `dark` (default), `light` or `both` (files get a `-dark` / `-light` suffix) |
 | `-o, --out <dir>` | Output directory (default: `./wrapped`) |
+| `--name <template>` | File name without extension, with `{login}`, `{year}` and `{card}` (default: `{login}-{year}-{card}`) |
 | `--tz=<hours>` | UTC offset for the hourly chart, e.g. `--tz=-3` (default: your system timezone) |
 | `--json` | Print the computed stats as JSON instead of writing files |
 | `--demo` | Use built-in sample data, no token needed |
@@ -94,9 +95,62 @@ Everything also comes in a light theme:
 
 <img src="docs/examples/summary-light.svg" alt="Summary card, light theme" width="560">
 
-## Embed in your profile README
+## Keep your profile README up to date (GitHub Action)
 
-Run the server and every card becomes an image URL:
+The easiest way to show your cards on your GitHub profile needs no server. This repository is also a GitHub Action: it regenerates your cards on a schedule and commits them to your profile repository (the one named `<your-username>/<your-username>`).
+
+Create `.github/workflows/gitwrapped.yml` there:
+
+```yaml
+name: Update Git Wrapped
+
+on:
+  schedule:
+    - cron: "0 6 * * 1"   # every Monday
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  wrapped:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: guilhermeoliveirabrito/gitwrapped@main
+        with:
+          tz: "-3"   # your UTC offset, used for the hours chart
+```
+
+Then reference the cards in your profile `README.md`. The `<picture>` element picks the dark or light card to match the viewer's GitHub theme:
+
+```html
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="gitwrapped/summary-dark.svg">
+  <source media="(prefers-color-scheme: light)" srcset="gitwrapped/summary-light.svg">
+  <img alt="My year in code" src="gitwrapped/summary-dark.svg">
+</picture>
+```
+
+Run the workflow once by hand from the **Actions** tab to create the first set of cards. The file names never include the year, so the README does not need to change when the year does.
+
+| Input | Default | Description |
+| --- | --- | --- |
+| `username` | repository owner | GitHub user to summarize |
+| `token` | `github.token` | Token used to read GitHub data. The default only sees public activity; pass a personal access token with `read:user` to include private contributions |
+| `year` | current year | Year to summarize |
+| `cards` | all | Comma separated list of cards |
+| `tz` | UTC | UTC offset in hours for the hourly chart, e.g. `-3` |
+| `output-dir` | `gitwrapped` | Directory for the cards, relative to the repository root |
+| `commit` | `true` | Commit and push when the cards changed |
+| `commit-message` | `Update Git Wrapped cards` | Message of that commit |
+| `demo` | `false` | Use sample data instead of calling GitHub |
+
+The action also sets a `changed` output (`true`, `false` or `unknown`), so later steps can react to new cards.
+
+## Embed with the HTTP server
+
+If you would rather host the API yourself, run the server and every card becomes an image URL:
 
 ```bash
 export GITHUB_TOKEN=ghp_your_token
@@ -183,7 +237,7 @@ Node runs the TypeScript sources directly during development, so there is no wat
 Ideas that would make a great first contribution:
 
 - [ ] Publish to npm so `npx gitwrapped <user>` just works
-- [ ] GitHub Action that keeps a wrapped card in your profile README up to date
+- [ ] Publish the Action to the GitHub Marketplace
 - [ ] PNG export for platforms that do not accept SVG
 - [ ] More cards: pull request and review stats, most starred repository
 - [ ] Translated cards (the strings are all in `src/cards/`)

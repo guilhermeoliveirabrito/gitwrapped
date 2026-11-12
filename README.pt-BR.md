@@ -44,9 +44,48 @@ npm run cli -- seu-usuario --tz=-3
 
 Os cards são salvos em `./wrapped`. A opção `--tz` define o fuso usado no gráfico por hora (por padrão, o fuso do seu sistema).
 
-## Embutir no README do perfil
+## Manter o README do perfil atualizado (GitHub Action)
 
-Suba o servidor e cada card vira uma URL de imagem:
+O jeito mais simples de mostrar os cards no seu perfil não precisa de servidor. Este repositório também é um GitHub Action: ele gera os cards de novo toda semana e faz o commit no repositório do seu perfil (o que tem o nome `seu-usuario/seu-usuario`).
+
+Crie `.github/workflows/gitwrapped.yml` nele:
+
+```yaml
+name: Update Git Wrapped
+
+on:
+  schedule:
+    - cron: "0 6 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  wrapped:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: guilhermeoliveirabrito/gitwrapped@main
+        with:
+          tz: "-3"
+```
+
+E use os cards no `README.md` do perfil. O `<picture>` escolhe o card claro ou escuro conforme o tema de quem está vendo:
+
+```html
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="gitwrapped/summary-dark.svg">
+  <source media="(prefers-color-scheme: light)" srcset="gitwrapped/summary-light.svg">
+  <img alt="Meu ano em código" src="gitwrapped/summary-dark.svg">
+</picture>
+```
+
+Rode o workflow uma vez na aba **Actions** para criar os primeiros cards. A tabela completa de opções está no [README em inglês](README.md#keep-your-profile-readme-up-to-date-github-action).
+
+## Embutir com o servidor HTTP
+
+Se preferir hospedar a API, suba o servidor e cada card vira uma URL de imagem:
 
 ```bash
 export GITHUB_TOKEN=ghp_seu_token
@@ -57,7 +96,7 @@ npm run build && npm start
 ![Meu 2025](https://seu-host/api/card/summary?user=seu-usuario&year=2025)
 ```
 
-Também há um `Dockerfile` para hospedar por conta própria. Veja a seção de API e Docker no [README em inglês](README.md#embed-in-your-profile-readme).
+Também há um `Dockerfile` para hospedar por conta própria. Veja a seção de API e Docker no [README em inglês](README.md#embed-with-the-http-server).
 
 ## Contribuindo
 

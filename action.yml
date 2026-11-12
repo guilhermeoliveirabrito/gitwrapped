@@ -1,0 +1,63 @@
+name: Git Wrapped
+description: Generate your Git Wrapped recap cards and keep them up to date in your profile README.
+author: Guilherme Oliveira de Brito Silva
+
+branding:
+  icon: gift
+  color: purple
+
+inputs:
+  username:
+    description: GitHub user to summarize.
+    default: ${{ github.repository_owner }}
+  token:
+    description: >-
+      Token used to read GitHub data. The default token only sees public activity;
+      pass a personal access token with the read:user scope to include private contributions.
+    default: ${{ github.token }}
+  year:
+    description: Year to summarize. Defaults to the current year.
+    default: ''
+  cards:
+    description: Comma separated list of cards (summary, languages, rhythm, heatmap, personality). Defaults to all.
+    default: ''
+  tz:
+    description: UTC offset in hours for the hourly chart, for example -3 or 5.5. Defaults to UTC.
+    default: ''
+  output-dir:
+    description: Directory, relative to the repository root, where the cards are written.
+    default: gitwrapped
+  commit:
+    description: Commit and push the cards when they changed. Needs the contents write permission.
+    default: 'true'
+  commit-message:
+    description: Message of the commit created when commit is true.
+    default: Update Git Wrapped cards
+  demo:
+    description: Use built-in sample data instead of calling GitHub. Handy for trying the action out.
+    default: 'false'
+
+outputs:
+  changed:
+    description: "'true' when the cards changed, 'false' when they did not, 'unknown' outside a git repository."
+    value: ${{ steps.wrapped.outputs.changed }}
+
+runs:
+  using: composite
+  steps:
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 22
+    - id: wrapped
+      shell: bash
+      run: bash "$GITHUB_ACTION_PATH/action/run.sh"
+      env:
+        GITHUB_TOKEN: ${{ inputs.token }}
+        GW_USERNAME: ${{ inputs.username }}
+        GW_YEAR: ${{ inputs.year }}
+        GW_CARDS: ${{ inputs.cards }}
+        GW_TZ: ${{ inputs.tz }}
+        GW_OUTPUT_DIR: ${{ inputs.output-dir }}
+        GW_COMMIT: ${{ inputs.commit }}
+        GW_COMMIT_MESSAGE: ${{ inputs.commit-message }}
+        GW_DEMO: ${{ inputs.demo }}
