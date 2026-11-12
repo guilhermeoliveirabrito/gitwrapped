@@ -67,6 +67,8 @@ Cards are written to `./wrapped` and a summary is printed in the terminal:
   The best commits happen after the world goes to sleep.
 ```
 
+Happy with your cards? Post them with **#GitWrapped** and tag the repo so others can find it.
+
 ### CLI options
 
 | Option | Description |
@@ -201,6 +203,13 @@ Your personality comes from simple, readable rules over your real activity. Ther
 
 The rules live in [`src/personality.ts`](src/personality.ts). Want a new archetype? Open a PR.
 
+## Privacy
+
+- Your token is only ever sent to `api.github.com`. The CLI uses it for the request and discards it; the server keeps it in memory and never logs it or includes it in a response.
+- Names of private repositories are replaced by "Private repository" in every card and in the JSON output. Their commit counts and main language still count towards the totals and the language shares, so leave private contributions out (use a token without `read:user`) if that is more than you want to show.
+- With a token that has no extra scopes, only public activity is counted. Private contributions are included only if the token has `read:user`.
+- Nothing is stored on disk by the CLI except the cards you ask for. The server caches GitHub responses in memory for one hour.
+
 ## How it works
 
 ```text
@@ -243,6 +252,10 @@ Ideas that would make a great first contribution:
 - [ ] Team and organization wrapped
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) to get started.
+
+## Support the project
+
+If Git Wrapped made your year in code a bit more fun, a ⭐ on the repository helps other developers find it. Bug reports, ideas and pull requests are even better.
 
 ## License
 
