@@ -47,7 +47,8 @@ interface UserResponse {
           stargazerCount: number;
           primaryLanguage: { name: string; color: string | null } | null;
         };
-        contributions: { totalCount: number };
+        // One node per day with commits, so totalCount counts days, not commits.
+        contributions: { totalCount: number; nodes: { commitCount: number }[] | null };
       }[];
     };
   } | null;
@@ -57,7 +58,7 @@ type HistoryResponse = Record<
   string,
   {
     defaultBranchRef: {
-      target: { history?: { nodes: { committedDate: string }[] } } | null;
+      target: { history?: { totalCount: number; nodes: { committedDate: string }[] } } | null;
     } | null;
   } | null
 >;
@@ -94,8 +95,11 @@ const USER_QUERY = /* GraphQL */ `
               color
             }
           }
-          contributions {
+          contributions(first: 100) {
             totalCount
+            nodes {
+              commitCount
+            }
           }
         }
       }
@@ -109,7 +113,7 @@ export function buildHistoryQuery(repoCount: number): string {
   const fields = Array.from(
     { length: repoCount },
     (_, i) =>
-      `r${i}: repository(owner: $o${i}, name: $n${i}) { defaultBranchRef { target { ... on Commit { history(author: { id: $id }, since: $since, until: $until, first: ${HISTORY_PAGE}) { nodes { committedDate } } } } } }`,
+      `r${i}: repository(owner: $o${i}, name: $n${i}) { defaultBranchRef { target { ... on Commit { history(author: { id: $id }, since: $since, until: $until, first: ${HISTORY_PAGE}) { totalCount nodes { committedDate } } } } } }`,
   ).join('\n');
   return `query WrappedHistory($id: ID!, $since: GitTimestamp!, $until: GitTimestamp!, ${vars}) {\n${fields}\n}`;
 }
@@ -211,14 +215,28 @@ export async function fetchYearData(login: string, options: FetchOptions): Promi
     .map((entry) => ({
       nameWithOwner: entry.repository.nameWithOwner,
       isPrivate: entry.repository.isPrivate,
-      commits: entry.contributions.totalCount,
+      // A first estimate: one node per active day, so this is exact up to 100 active days.
+      commits: (entry.contributions.nodes ?? []).reduce((sum, node) => sum + node.commitCount, 0),
       stars: entry.repository.stargazerCount,
       language: entry.repository.primaryLanguage?.name ?? null,
       languageColor: entry.repository.primaryLanguage?.color ?? null,
     }))
     .sort((a, b) => b.commits - a.commits);
 
-  const commitTimestamps = await fetchCommitTimestamps(user.id, repos, { from, to }, token, fetchImpl);
+  // The busiest repositories are looked up again for the exact commit count and for timestamps.
+  const top = repos.filter((r) => r.commits > 0).slice(0, HISTORY_REPOS);
+  const { timestamps: commitTimestamps, totals } = await fetchCommitDetails(
+    user.id,
+    top,
+    { from, to },
+    token,
+    fetchImpl,
+  );
+  top.forEach((repo, i) => {
+    const exact = totals[i];
+    if (exact !== undefined && exact > 0) repo.commits = exact;
+  });
+  repos.sort((a, b) => b.commits - a.commits);
 
   return {
     login: user.login,
@@ -235,20 +253,28 @@ export async function fetchYearData(login: string, options: FetchOptions): Promi
   };
 }
 
+interface CommitDetails {
+  /** Sampled commit timestamps across all the given repositories. */
+  timestamps: string[];
+  /** Exact number of the user's commits per repository, aligned with the input. Missing when unknown. */
+  totals: (number | undefined)[];
+}
+
 /**
  * Contribution calendars only have day-level resolution, so for the hourly chart we sample real
- * commit timestamps from the most active repositories. This is best effort: any failure here
- * results in an empty sample instead of failing the whole request.
+ * commit timestamps from the most active repositories, and the same query gives their exact commit
+ * counts. This is best effort: any failure here results in no sample and keeps the first estimates
+ * instead of failing the whole request.
  */
-async function fetchCommitTimestamps(
+async function fetchCommitDetails(
   userId: string,
-  repos: RepoContribution[],
+  top: RepoContribution[],
   period: { from: string; to: string },
   token: string,
   fetchImpl: typeof fetch,
-): Promise<string[]> {
-  const top = repos.filter((r) => r.commits > 0).slice(0, HISTORY_REPOS);
-  if (top.length === 0) return [];
+): Promise<CommitDetails> {
+  const none: CommitDetails = { timestamps: [], totals: [] };
+  if (top.length === 0) return none;
 
   const variables: Record<string, unknown> = { id: userId, since: period.from, until: period.to };
   top.forEach((repo, i) => {
@@ -260,15 +286,17 @@ async function fetchCommitTimestamps(
   try {
     const response = await graphql<HistoryResponse>(buildHistoryQuery(top.length), variables, token, fetchImpl);
     const data = response.data;
-    if (!data) return [];
+    if (!data) return none;
     const timestamps: string[] = [];
+    const totals: (number | undefined)[] = [];
     for (let i = 0; i < top.length; i++) {
-      const nodes = data[`r${i}`]?.defaultBranchRef?.target?.history?.nodes ?? [];
-      for (const node of nodes) timestamps.push(node.committedDate);
+      const history = data[`r${i}`]?.defaultBranchRef?.target?.history;
+      totals.push(history?.totalCount);
+      for (const node of history?.nodes ?? []) timestamps.push(node.committedDate);
     }
-    return timestamps;
+    return { timestamps, totals };
   } catch (error) {
-    if (error instanceof GitWrappedError) return [];
+    if (error instanceof GitWrappedError) return none;
     throw error;
   }
 }

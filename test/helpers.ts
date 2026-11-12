@@ -80,7 +80,7 @@ export function githubFetchMock() {
                   stargazerCount: 12,
                   primaryLanguage: { name: 'TypeScript', color: '#3178c6' },
                 },
-                contributions: { totalCount: 8 },
+                contributions: { totalCount: 2, nodes: [{ commitCount: 5 }, { commitCount: 3 }] },
               },
             ],
           },

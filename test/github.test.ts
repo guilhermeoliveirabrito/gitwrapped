@@ -31,7 +31,7 @@ const userPayload = {
         commitContributionsByRepository: [
           {
             repository: { nameWithOwner: 'octocat/small', isPrivate: false, stargazerCount: 1, primaryLanguage: null },
-            contributions: { totalCount: 2 },
+            contributions: { totalCount: 1, nodes: [{ commitCount: 2 }] },
           },
           {
             repository: {
@@ -40,7 +40,8 @@ const userPayload = {
               stargazerCount: 99,
               primaryLanguage: { name: 'TypeScript', color: '#3178c6' },
             },
-            contributions: { totalCount: 10 },
+            // two active days with 6 and 4 commits: totalCount counts days, not commits
+            contributions: { totalCount: 2, nodes: [{ commitCount: 6 }, { commitCount: 4 }] },
           },
         ],
       },
@@ -50,7 +51,11 @@ const userPayload = {
 
 const historyPayload = {
   data: {
-    r0: { defaultBranchRef: { target: { history: { nodes: [{ committedDate: '2025-03-01T10:00:00Z' }] } } } },
+    r0: {
+      defaultBranchRef: {
+        target: { history: { totalCount: 150, nodes: [{ committedDate: '2025-03-01T10:00:00Z' }] } },
+      },
+    },
     r1: null,
   },
 };
@@ -107,6 +112,10 @@ describe('fetchYearData', () => {
     assert.equal(data.repos[0]?.nameWithOwner, 'octocat/big');
     assert.equal(data.repos[0]?.language, 'TypeScript');
     assert.equal(data.repos[1]?.language, null);
+    // the busiest repository gets its exact commit count from the history query (150),
+    // the other one keeps the sum of its daily counts (2)
+    assert.equal(data.repos[0]?.commits, 150);
+    assert.equal(data.repos[1]?.commits, 2);
     assert.deepEqual(data.commitTimestamps, ['2025-03-01T10:00:00Z']);
 
     assert.equal(calls.length, 2);
@@ -152,6 +161,8 @@ describe('fetchYearData', () => {
     const data = await fetchYearData('octocat', { token: 't', year: 2025, fetchImpl, now: NOW });
     assert.deepEqual(data.commitTimestamps, []);
     assert.equal(data.days.length, 2);
+    // without the history query the daily counts are used (6 + 4), not the number of days
+    assert.equal(data.repos[0]?.commits, 10);
   });
 
   it('maps a missing user to NOT_FOUND', async () => {

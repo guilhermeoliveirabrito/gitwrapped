@@ -195,7 +195,7 @@ describe('run', () => {
               stargazerCount: 2,
               primaryLanguage: { name: 'Go', color: '#00add8' },
             },
-            contributions: { totalCount: 3 },
+            contributions: { totalCount: 1, nodes: [{ commitCount: 3 }] },
           },
         ],
       },
