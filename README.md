@@ -164,6 +164,8 @@ npm start        # after npm run build, or use npm run dev
 
 Open the server's home page for a live preview and a copy-paste snippet. Because it is a regular image, it works anywhere Markdown does.
 
+<img src="docs/landing-page.png" alt="The Git Wrapped home page with a live card preview" width="560">
+
 ### API
 
 | Endpoint | Returns |
