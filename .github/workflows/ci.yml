@@ -46,6 +46,27 @@ jobs:
           test -s action-cards/summary-light.svg
           test "$(ls action-cards | wc -l)" -eq 12
 
+  docker:
+    name: Docker image works
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker build -t gitwrapped .
+      - name: Start the container
+        run: docker run -d --name gw -p 3000:3000 gitwrapped
+      - name: Wait for the server
+        run: |
+          for i in $(seq 1 20); do
+            curl -fsS http://localhost:3000/healthz && break
+            sleep 1
+          done
+          curl -fsS http://localhost:3000/healthz
+      - name: Serve a demo card
+        run: curl -fsS http://localhost:3000/api/demo/summary | grep -q "<svg"
+      - name: Show logs on failure
+        if: failure()
+        run: docker logs gw
+
   examples:
     name: Examples are up to date
     runs-on: ubuntu-latest
