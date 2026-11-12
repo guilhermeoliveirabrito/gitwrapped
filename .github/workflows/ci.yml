@@ -16,7 +16,7 @@ jobs:
       matrix:
         node: [22, 24]
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node }}
@@ -31,7 +31,7 @@ jobs:
     name: GitHub Action works
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Run the action on sample data
         id: wrapped
         uses: ./
@@ -50,7 +50,7 @@ jobs:
     name: Docker image works
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - run: docker build -t gitwrapped .
       - name: Start the container
         run: docker run -d --name gw -p 3000:3000 gitwrapped
@@ -71,7 +71,7 @@ jobs:
     name: Examples are up to date
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: actions/setup-node@v4
         with:
           node-version: 22
