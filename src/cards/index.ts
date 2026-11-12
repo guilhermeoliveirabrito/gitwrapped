@@ -2,6 +2,7 @@ import type { WrappedStats } from '../types.ts';
 import { heatmapCard } from './heatmap.ts';
 import { languagesCard } from './languages.ts';
 import { personalityCard } from './personality.ts';
+import { reposCard } from './repos.ts';
 import { rhythmCard } from './rhythm.ts';
 import { summaryCard } from './summary.ts';
 import { MARGIN, THEMES, eyebrow, frame, text, truncate } from './svg.ts';
@@ -10,7 +11,7 @@ import type { ThemeName } from './svg.ts';
 export { THEME_NAMES, isThemeName } from './svg.ts';
 export type { ThemeName } from './svg.ts';
 
-export const CARD_NAMES = ['summary', 'languages', 'rhythm', 'heatmap', 'personality'] as const;
+export const CARD_NAMES = ['summary', 'languages', 'repos', 'rhythm', 'heatmap', 'personality'] as const;
 export type CardName = (typeof CARD_NAMES)[number];
 
 export function isCardName(value: string): value is CardName {
@@ -20,6 +21,7 @@ export function isCardName(value: string): value is CardName {
 const RENDERERS = {
   summary: summaryCard,
   languages: languagesCard,
+  repos: reposCard,
   rhythm: rhythmCard,
   heatmap: heatmapCard,
   personality: personalityCard,

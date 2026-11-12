@@ -19,7 +19,7 @@ inputs:
     description: Year to summarize. Defaults to the current year.
     default: ''
   cards:
-    description: Comma separated list of cards (summary, languages, rhythm, heatmap, personality). Defaults to all.
+    description: Comma separated list of cards (summary, languages, repos, rhythm, heatmap, personality). Defaults to all.
     default: ''
   tz:
     description: UTC offset in hours for the hourly chart, for example -3 or 5.5. Defaults to UTC.

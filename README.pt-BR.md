@@ -15,7 +15,7 @@ Cards compartilháveis para qualquer perfil do GitHub: linguagens, sequências, 
 
 O Spotify tem o Wrapped. O seu histórico de commits também merece um. O Git Wrapped transforma um ano de atividade no GitHub em cards 1200×630 prontos para postar ou colocar no README do seu perfil.
 
-- **Cinco cards**: resumo, linguagens, ritmo de código, calendário de contribuições e personalidade dev
+- **Seis cards**: resumo, linguagens, repositórios mais ativos, ritmo de código, calendário de contribuições e personalidade dev
 - **Temas escuro e claro**, em SVG puro: nítido em qualquer tamanho e funciona em README
 - **CLI e API HTTP**: gere arquivos localmente ou rode um servidor e embuta os cards com uma linha de Markdown
 - **Zero dependências em runtime**: só Node.js, a biblioteca padrão e a API GraphQL do GitHub

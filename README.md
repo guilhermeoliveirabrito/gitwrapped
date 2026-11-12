@@ -20,7 +20,7 @@ Shareable recap cards for any GitHub profile: languages, streaks, coding rhythm 
 
 Spotify has Wrapped. Your commit history deserves one too. Git Wrapped turns a year of GitHub activity into a set of clean 1200×630 cards that are ready to post or embed in your profile README.
 
-- **Five cards**: summary, languages, coding rhythm, contribution calendar and dev personality
+- **Six cards**: summary, languages, top repositories, coding rhythm, contribution calendar and dev personality
 - **Dark and light themes**, plain SVG: sharp at any size, tiny, and works in a README
 - **CLI and HTTP API**: generate files locally, or serve cards you can embed with one line of Markdown
 - **Zero runtime dependencies**: just Node.js, the standard library and the GitHub GraphQL API
@@ -88,12 +88,11 @@ npm run cli -- octocat --year 2024 --card summary,heatmap --theme light
 
 | | |
 | --- | --- |
-| <img src="docs/examples/languages-dark.svg" alt="Languages card"> | <img src="docs/examples/rhythm-dark.svg" alt="Coding rhythm card"> |
-| <img src="docs/examples/heatmap-dark.svg" alt="Contribution calendar card"> | <img src="docs/examples/personality-dark.svg" alt="Dev personality card"> |
+| <img src="docs/examples/languages-dark.svg" alt="Languages card"> | <img src="docs/examples/repos-dark.svg" alt="Top repositories card"> |
+| <img src="docs/examples/rhythm-dark.svg" alt="Coding rhythm card"> | <img src="docs/examples/heatmap-dark.svg" alt="Contribution calendar card"> |
+| <img src="docs/examples/personality-dark.svg" alt="Dev personality card"> | <img src="docs/examples/summary-light.svg" alt="Summary card in the light theme"> |
 
-Everything also comes in a light theme:
-
-<img src="docs/examples/summary-light.svg" alt="Summary card, light theme" width="560">
+Every card comes in a dark and a light theme (the last one above is the light summary).
 
 ## Keep your profile README up to date (GitHub Action)
 
@@ -172,7 +171,7 @@ Open the server's home page for a live preview and a copy-paste snippet. Because
 | `GET /api/demo/:card?theme=` | A card with sample data, no token needed |
 | `GET /healthz` | Health check |
 
-`:card` is one of `summary`, `languages`, `rhythm`, `heatmap`, `personality`. Errors on card endpoints are rendered as a card too, so a broken embed explains itself instead of showing a missing-image icon.
+`:card` is one of `summary`, `languages`, `repos`, `rhythm`, `heatmap`, `personality`. Errors on card endpoints are rendered as a card too, so a broken embed explains itself instead of showing a missing-image icon.
 
 GitHub data is cached in memory for an hour, concurrent lookups for the same profile are de-duplicated, and each client is limited to 60 requests per minute. Set `TRUST_PROXY=1` when running behind a reverse proxy so the limit applies per real client address.
 

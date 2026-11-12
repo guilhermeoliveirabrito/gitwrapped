@@ -102,6 +102,31 @@ describe('escaping', () => {
   });
 });
 
+describe('repos card', () => {
+  it('lists the most active repositories with commits and stars', () => {
+    const svg = renderCard('repos', demoStats);
+    assert.ok(svg.includes('sample-dev/awesome-cli'));
+    assert.ok(svg.includes('310 commits'));
+    assert.ok(svg.includes('Private repository'));
+    assert.ok(svg.includes('private'));
+  });
+
+  it('escapes repository names and uses the singular for one commit', () => {
+    const raw = makeRaw({
+      repos: [{ nameWithOwner: '<b>x</b>/"y"', isPrivate: false, commits: 1, stars: 1234, language: null, languageColor: null }],
+    });
+    const svg = renderCard('repos', computeStats(raw, { now: AFTER_2025 }));
+    assert.ok(!svg.includes('<b>'));
+    assert.ok(svg.includes('1 commit<'));
+    assert.ok(svg.includes('1,234'));
+    assertWellFormed(svg);
+  });
+
+  it('explains when there is no repository activity', () => {
+    assert.ok(renderCard('repos', emptyStats).includes('No commits to repositories were recorded this year.'));
+  });
+});
+
 describe('error card', () => {
   it('renders a standalone SVG for both themes', () => {
     for (const theme of THEME_NAMES) {

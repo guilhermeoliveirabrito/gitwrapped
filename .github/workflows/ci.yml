@@ -44,7 +44,7 @@ jobs:
           test "${{ steps.wrapped.outputs.changed }}" = "true"
           test -s action-cards/summary-dark.svg
           test -s action-cards/summary-light.svg
-          test "$(ls action-cards | wc -l)" -eq 10
+          test "$(ls action-cards | wc -l)" -eq 12
 
   examples:
     name: Examples are up to date

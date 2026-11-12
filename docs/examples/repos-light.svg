@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="gw-repos-t gw-repos-d">
+<title id="gw-repos-t">Top repositories of sample-dev in 2025</title>
+<desc id="gw-repos-d">1. sample-dev/awesome-cli, 310 commits; 2. sample-dev/web-dashboard, 128 commits; 3. sample-dev/ml-playground, 96 commits; 4. sample-dev/rusty-kv, 71 commits; 5. Private repository, 55 commits</desc>
+<defs>
+<linearGradient id="gw-repos-bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f8fafc"/><stop offset="1" stop-color="#e8ecff"/></linearGradient>
+<linearGradient id="gw-repos-accent" gradientUnits="userSpaceOnUse" x1="64" y1="0" x2="1136" y2="0"><stop offset="0" stop-color="#7c3aed"/><stop offset="0.55" stop-color="#db2777"/><stop offset="1" stop-color="#0891b2"/></linearGradient>
+<radialGradient id="gw-repos-glow-a"><stop offset="0" stop-color="#7c3aed" stop-opacity="0.35"/><stop offset="1" stop-color="#7c3aed" stop-opacity="0"/></radialGradient>
+<radialGradient id="gw-repos-glow-b"><stop offset="0" stop-color="#0891b2" stop-opacity="0.22"/><stop offset="1" stop-color="#0891b2" stop-opacity="0"/></radialGradient>
+</defs>
+<rect width="1200" height="630" fill="url(#gw-repos-bg)"/>
+<circle cx="1080" cy="40" r="360" fill="url(#gw-repos-glow-a)"/>
+<circle cx="80" cy="620" r="320" fill="url(#gw-repos-glow-b)"/>
+<g font-family="-apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif" fill="#0f172a">
+<text x="64" y="88" font-size="18" font-weight="700" fill="url(#gw-repos-accent)" letter-spacing="4">TOP REPOSITORIES · 2025</text>
+<text x="64" y="152" font-size="52" font-weight="800">Where your year went</text>
+<text x="64" y="190" font-size="24" font-weight="400" fill="#475569">Your most active repositories, ranked by commits</text>
+<rect x="64" y="226" width="1072" height="56" rx="16" fill="#0f172a" fill-opacity="0.05"/>
+<text x="88" y="262" font-size="22" font-weight="800" fill="url(#gw-repos-accent)">1</text>
+<text x="128" y="263" font-size="26" font-weight="600">sample-dev/awesome-cli</text>
+<rect x="564" y="248" width="200" height="12" rx="6" fill="#0f172a" fill-opacity="0.1"/>
+<rect x="564" y="248" width="200" height="12" rx="6" fill="url(#gw-repos-accent)"/>
+<polygon points="802,245 804.12,251.09 810.56,251.22 805.42,255.11 807.29,261.28 802,257.6 796.71,261.28 798.58,255.11 793.44,251.22 799.88,251.09" fill="#0891b2"/>
+<text x="820" y="261" font-size="20" font-weight="400" fill="#475569">842</text>
+<text x="1112" y="262" font-size="22" font-weight="700" text-anchor="end">310 commits</text>
+<rect x="64" y="294" width="1072" height="56" rx="16" fill="#0f172a" fill-opacity="0.05"/>
+<text x="88" y="330" font-size="22" font-weight="800" fill="url(#gw-repos-accent)">2</text>
+<text x="128" y="331" font-size="26" font-weight="600">sample-dev/web-dashboard</text>
+<rect x="564" y="316" width="200" height="12" rx="6" fill="#0f172a" fill-opacity="0.1"/>
+<rect x="564" y="316" width="82.58" height="12" rx="6" fill="url(#gw-repos-accent)"/>
+<polygon points="802,313 804.12,319.09 810.56,319.22 805.42,323.11 807.29,329.28 802,325.6 796.71,329.28 798.58,323.11 793.44,319.22 799.88,319.09" fill="#0891b2"/>
+<text x="820" y="329" font-size="20" font-weight="400" fill="#475569">96</text>
+<text x="1112" y="330" font-size="22" font-weight="700" text-anchor="end">128 commits</text>
+<rect x="64" y="362" width="1072" height="56" rx="16" fill="#0f172a" fill-opacity="0.05"/>
+<text x="88" y="398" font-size="22" font-weight="800" fill="url(#gw-repos-accent)">3</text>
+<text x="128" y="399" font-size="26" font-weight="600">sample-dev/ml-playground</text>
+<rect x="564" y="384" width="200" height="12" rx="6" fill="#0f172a" fill-opacity="0.1"/>
+<rect x="564" y="384" width="61.94" height="12" rx="6" fill="url(#gw-repos-accent)"/>
+<polygon points="802,381 804.12,387.09 810.56,387.22 805.42,391.11 807.29,397.28 802,393.6 796.71,397.28 798.58,391.11 793.44,387.22 799.88,387.09" fill="#0891b2"/>
+<text x="820" y="397" font-size="20" font-weight="400" fill="#475569">41</text>
+<text x="1112" y="398" font-size="22" font-weight="700" text-anchor="end">96 commits</text>
+<rect x="64" y="430" width="1072" height="56" rx="16" fill="#0f172a" fill-opacity="0.05"/>
+<text x="88" y="466" font-size="22" font-weight="800" fill="url(#gw-repos-accent)">4</text>
+<text x="128" y="467" font-size="26" font-weight="600">sample-dev/rusty-kv</text>
+<rect x="564" y="452" width="200" height="12" rx="6" fill="#0f172a" fill-opacity="0.1"/>
+<rect x="564" y="452" width="45.81" height="12" rx="6" fill="url(#gw-repos-accent)"/>
+<polygon points="802,449 804.12,455.09 810.56,455.22 805.42,459.11 807.29,465.28 802,461.6 796.71,465.28 798.58,459.11 793.44,455.22 799.88,455.09" fill="#0891b2"/>
+<text x="820" y="465" font-size="20" font-weight="400" fill="#475569">213</text>
+<text x="1112" y="466" font-size="22" font-weight="700" text-anchor="end">71 commits</text>
+<rect x="64" y="498" width="1072" height="56" rx="16" fill="#0f172a" fill-opacity="0.05"/>
+<text x="88" y="534" font-size="22" font-weight="800" fill="url(#gw-repos-accent)">5</text>
+<text x="128" y="535" font-size="26" font-weight="600">Private repository</text>
+<rect x="564" y="520" width="200" height="12" rx="6" fill="#0f172a" fill-opacity="0.1"/>
+<rect x="564" y="520" width="35.48" height="12" rx="6" fill="url(#gw-repos-accent)"/>
+<text x="794" y="533" font-size="18" font-weight="400" fill="#475569">private</text>
+<text x="1112" y="534" font-size="22" font-weight="700" text-anchor="end">55 commits</text>
+<text x="64" y="604" font-size="18" font-weight="700" fill="url(#gw-repos-accent)">gitwrapped</text>
+<text x="1136" y="604" font-size="16" font-weight="400" fill="#475569" text-anchor="end">github.com/guilhermeoliveirabrito/gitwrapped</text>
+</g>
+</svg>

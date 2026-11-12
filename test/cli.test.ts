@@ -34,7 +34,7 @@ describe('parseCli', () => {
     assert.deepEqual(options.themes, ['dark']);
     assert.equal(options.name, '{login}-{year}-{card}');
     assert.equal(options.out, 'wrapped');
-    assert.equal(options.cards.length, 5);
+    assert.equal(options.cards.length, 6);
     assert.equal(options.utcOffsetMinutes, undefined);
     assert.equal(options.demo, false);
   });
@@ -114,13 +114,14 @@ describe('run', () => {
       'sample-dev-2025-heatmap.svg',
       'sample-dev-2025-languages.svg',
       'sample-dev-2025-personality.svg',
+      'sample-dev-2025-repos.svg',
       'sample-dev-2025-rhythm.svg',
       'sample-dev-2025-summary.svg',
     ]);
     const summary = await readFile(path.join(out, 'sample-dev-2025-summary.svg'), 'utf8');
     assert.ok(summary.startsWith('<svg'));
     assert.match(c.stdout(), /Git Wrapped 2025/);
-    assert.match(c.stdout(), /Saved 5 cards/);
+    assert.match(c.stdout(), /Saved 6 cards/);
     assert.match(c.stdout(), /The Night Owl/);
   });
 

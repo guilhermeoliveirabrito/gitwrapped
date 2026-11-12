@@ -41,6 +41,7 @@ export const LANDING_HTML = `<!doctype html>
     <label>Card<select id="card">
       <option value="summary">Summary</option>
       <option value="languages">Languages</option>
+      <option value="repos">Repositories</option>
       <option value="rhythm">Rhythm</option>
       <option value="heatmap">Heatmap</option>
       <option value="personality">Personality</option>

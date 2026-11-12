@@ -58,7 +58,7 @@ describe('server', () => {
   });
 
   it('renders every card type for a user', async () => {
-    for (const card of ['summary', 'languages', 'rhythm', 'heatmap', 'personality']) {
+    for (const card of ['summary', 'languages', 'repos', 'rhythm', 'heatmap', 'personality']) {
       const res = await fetch(`${base}/api/card/${card}?user=octocat&year=2025`);
       assert.equal(res.status, 200, card);
       assert.ok((await res.text()).startsWith('<svg'), card);
