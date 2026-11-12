@@ -1,0 +1,23 @@
+# dependencies and build output
+node_modules/
+dist/
+*.tsbuildinfo
+
+# default output folder of the CLI
+wrapped/
+
+# secrets
+.env
+.env.*
+!.env.example
+
+# logs and coverage
+*.log
+coverage/
+
+# editors and OS
+.idea/
+.vscode/*
+!.vscode/extensions.json
+.DS_Store
+Thumbs.db

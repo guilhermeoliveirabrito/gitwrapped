@@ -1,0 +1,60 @@
+{
+  "name": "gitwrapped",
+  "version": "0.1.0",
+  "description": "Your year in code, wrapped. Generate shareable recap cards from any GitHub profile.",
+  "type": "module",
+  "license": "MIT",
+  "author": "Guilherme Oliveira de Brito Silva",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/guilhermeoliveirabrito/gitwrapped.git"
+  },
+  "homepage": "https://github.com/guilhermeoliveirabrito/gitwrapped#readme",
+  "bugs": {
+    "url": "https://github.com/guilhermeoliveirabrito/gitwrapped/issues"
+  },
+  "keywords": [
+    "github",
+    "wrapped",
+    "year-in-review",
+    "developer-tools",
+    "github-api",
+    "data-visualization",
+    "svg",
+    "cli"
+  ],
+  "bin": {
+    "gitwrapped": "dist/bin.js"
+  },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "prebuild": "node -e \"require('node:fs').rmSync('dist', { recursive: true, force: true })\"",
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc -p tsconfig.json",
+    "test": "node --test \"test/**/*.test.ts\"",
+    "cli": "node src/bin.ts",
+    "dev": "node src/serve.ts",
+    "start": "node dist/serve.js",
+    "examples": "node scripts/generate-examples.ts",
+    "prepublishOnly": "npm run typecheck && npm test && npm run build"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "^5.9.0"
+  }
+}
