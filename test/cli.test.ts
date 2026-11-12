@@ -31,7 +31,8 @@ describe('parseCli', () => {
     const options = parseCli(['octocat'], NOW);
     assert.equal(options.username, 'octocat');
     assert.equal(options.year, 2026);
-    assert.equal(options.theme, 'dark');
+    assert.deepEqual(options.themes, ['dark']);
+    assert.equal(options.name, '{login}-{year}-{card}');
     assert.equal(options.out, 'wrapped');
     assert.equal(options.cards.length, 5);
     assert.equal(options.utcOffsetMinutes, undefined);
@@ -42,7 +43,7 @@ describe('parseCli', () => {
     const options = parseCli(['@octocat', '-y', '2024', '-t', 'light', '-o', 'out', '-c', 'summary,Heatmap,summary'], NOW);
     assert.equal(options.username, 'octocat');
     assert.equal(options.year, 2024);
-    assert.equal(options.theme, 'light');
+    assert.deepEqual(options.themes, ['light']);
     assert.equal(options.out, 'out');
     assert.deepEqual(options.cards, ['summary', 'heatmap']);
   });
@@ -50,6 +51,17 @@ describe('parseCli', () => {
   it('accepts negative and fractional timezone offsets', () => {
     assert.equal(parseCli(['x', '--tz=-3'], NOW).utcOffsetMinutes, -180);
     assert.equal(parseCli(['x', '--tz=5.5'], NOW).utcOffsetMinutes, 330);
+  });
+
+  it('expands --theme both into both themes', () => {
+    assert.deepEqual(parseCli(['x', '--theme', 'both'], NOW).themes, ['dark', 'light']);
+  });
+
+  it('rejects --name values that could escape the output directory', () => {
+    for (const bad of ['../evil', 'a/b', 'a\\b', '..', '   ', '']) {
+      assert.throws(() => parseCli(['x', '--name', bad], NOW), invalidInput, JSON.stringify(bad));
+    }
+    assert.equal(parseCli(['x', '--name', '{card}'], NOW).name, '{card}');
   });
 
   it('allows --demo without a username', () => {
@@ -118,6 +130,22 @@ describe('run', () => {
     assert.equal(await run(['--demo', '-c', 'summary', '-t', 'light', '-o', out], c.io), 0);
     assert.deepEqual(await readdir(out), ['sample-dev-2026-summary.svg']);
     assert.match(await readFile(path.join(out, 'sample-dev-2026-summary.svg'), 'utf8'), /#f8fafc/);
+  });
+
+  it('writes both themes with stable names for profile READMEs', async () => {
+    const out = path.join(dir, 'both');
+    const c = capture({ cwd: dir });
+    assert.equal(await run(['--demo', '-c', 'summary,heatmap', '-t', 'both', '--name', '{card}', '-o', out], c.io), 0);
+    assert.deepEqual((await readdir(out)).sort(), [
+      'heatmap-dark.svg',
+      'heatmap-light.svg',
+      'summary-dark.svg',
+      'summary-light.svg',
+    ]);
+    const dark = await readFile(path.join(out, 'summary-dark.svg'), 'utf8');
+    const light = await readFile(path.join(out, 'summary-light.svg'), 'utf8');
+    assert.notEqual(dark, light);
+    assert.match(c.stdout(), /Saved 4 cards/);
   });
 
   it('prints parseable JSON with --json and writes no files', async () => {

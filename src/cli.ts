@@ -16,7 +16,10 @@ export interface CliOptions {
   year: number;
   cards: CardName[];
   out: string;
-  theme: ThemeName;
+  /** One theme, or both when `--theme both` is used. */
+  themes: ThemeName[];
+  /** File name template without extension. Supports {login}, {year} and {card}. */
+  name: string;
   /** Undefined means "use the system timezone" (or UTC for demo data). */
   utcOffsetMinutes: number | undefined;
   json: boolean;
@@ -47,8 +50,11 @@ Options
   -y, --year <year>     Year to summarize (default: current year)
   -c, --card <names>    Comma separated list of cards, or "all" (default: all)
                         Cards: ${CARD_NAMES.join(', ')}
-  -t, --theme <theme>   dark or light (default: dark)
+  -t, --theme <theme>   dark, light or both (default: dark). With "both", files get
+                        a -dark or -light suffix
   -o, --out <dir>       Output directory (default: ./wrapped)
+      --name <template> File name without extension (default: {login}-{year}-{card})
+                        Use e.g. --name {card} for names that stay the same every year
       --tz=<hours>      UTC offset for the hourly chart, e.g. --tz=-3 or --tz=5.5
                         (default: your system timezone)
       --json            Print the computed stats as JSON instead of writing cards
@@ -87,8 +93,21 @@ export function parseCli(argv: string[], now: Date = new Date()): CliOptions {
   const year = values.year === undefined ? now.getFullYear() : Number(values.year);
   if (!Number.isInteger(year)) throw invalid(`Invalid year: "${values.year}".`);
 
-  const theme = values.theme ?? 'dark';
-  if (!isThemeName(theme)) throw invalid(`Unknown theme "${theme}". Use dark or light.`);
+  const themeArg = values.theme ?? 'dark';
+  let themes: ThemeName[];
+  if (themeArg === 'both') {
+    themes = ['dark', 'light'];
+  } else if (isThemeName(themeArg)) {
+    themes = [themeArg];
+  } else {
+    throw invalid(`Unknown theme "${themeArg}". Use dark, light or both.`);
+  }
+
+  const name = values.name ?? '{login}-{year}-{card}';
+  // The name becomes a file name inside --out, so it must not be able to point anywhere else.
+  if (name.trim() === '' || /[\\/\0]/.test(name) || name.includes('..')) {
+    throw invalid('Invalid --name. Use a plain file name without slashes, e.g. --name {card}.');
+  }
 
   let cards: CardName[] = [...CARD_NAMES];
   if (values.card !== undefined && values.card !== 'all') {
@@ -114,7 +133,8 @@ export function parseCli(argv: string[], now: Date = new Date()): CliOptions {
     year,
     cards,
     out: values.out ?? 'wrapped',
-    theme,
+    themes,
+    name,
     utcOffsetMinutes,
     json: values.json ?? false,
     demo: values.demo ?? false,
@@ -128,6 +148,7 @@ const OPTION_SPEC = {
   card: { type: 'string', short: 'c' },
   theme: { type: 'string', short: 't' },
   out: { type: 'string', short: 'o' },
+  name: { type: 'string' },
   tz: { type: 'string' },
   json: { type: 'boolean' },
   demo: { type: 'boolean' },
@@ -240,10 +261,17 @@ export async function run(argv: string[], io: CliIO): Promise<number> {
     const outDir = path.resolve(io.cwd, options.out);
     await mkdir(outDir, { recursive: true });
     const written: string[] = [];
-    for (const card of options.cards) {
-      const file = path.join(outDir, `${stats.login}-${stats.year}-${card}.svg`);
-      await writeFile(file, renderCard(card, stats, options.theme), 'utf8');
-      written.push(file);
+    const suffixThemes = options.themes.length > 1;
+    for (const theme of options.themes) {
+      for (const card of options.cards) {
+        const base = options.name
+          .replaceAll('{login}', stats.login)
+          .replaceAll('{year}', String(stats.year))
+          .replaceAll('{card}', card);
+        const file = path.join(outDir, `${base}${suffixThemes ? `-${theme}` : ''}.svg`);
+        await writeFile(file, renderCard(card, stats, theme), 'utf8');
+        written.push(file);
+      }
     }
 
     // Show paths relative to the current directory unless that would climb out of it.
